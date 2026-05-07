@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bản đồ Công viên Gia Định – IE402</title>
+
+  <!-- ArcGIS API for JavaScript 4.x (CDN) -->
+  <link rel="stylesheet" href="https://js.arcgis.com/4.29/esri/themes/light/main.css" />
+  <script src="https://js.arcgis.com/4.29/"></script>
+
+  <!-- Custom styles (Tiên La phụ trách) -->
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- ======================================================
+       HEADER – Tiên La phụ trách phần giao diện này
+       ====================================================== -->
+  <header id="app-header">
+    <div class="header-content">
+      <img src="assets/icons/park-logo.png" alt="Logo" class="header-logo" onerror="this.style.display='none'" />
+      <div class="header-text">
+        <h1 class="header-title">🌳 Bản đồ Công viên Gia Định</h1>
+        <p class="header-subtitle">Hệ thống thông tin địa lý – IE402 | Nhóm: ___________</p>
+      </div>
+    </div>
+  </header>
+
+  <!-- ======================================================
+       MAP CONTAINER
+       ====================================================== -->
+  <div id="viewDiv"></div>
+
+  <!-- ======================================================
+       LEGEND PANEL – Tiên La phụ trách
+       ====================================================== -->
+  <div id="legend-panel">
+    <div id="legend-toggle" onclick="toggleLegend()">📖 Chú giải</div>
+    <div id="legend-container"></div>
+  </div>
+
+  <!-- ======================================================
+       MEMBER MODULES – Must load BEFORE the main require()
+       ====================================================== -->
+  <script src="js/polygons.js"></script>
+  <script src="js/polylines.js"></script>
+  <script src="js/points.js"></script>
+
+  <!-- ======================================================
+       MAIN SCRIPT – Chương phụ trách
+       ====================================================== -->
+  <script>
+    require([
+      // --- Core ArcGIS modules ---
+      "esri/Map",
+      "esri/views/MapView",
+      "esri/layers/GraphicsLayer",
+      "esri/widgets/Legend",
+      "esri/widgets/ScaleBar",
+      "esri/widgets/Compass",
+      "esri/widgets/Home",
+
+    ], function (
+      Map,
+      MapView,
+      GraphicsLayer,
+      Legend,
+      ScaleBar,
+      Compass,
+      Home
+    ) {
+
+      // ============================================================
+      // 1. CẤU HÌNH BẢN ĐỒ (Chương setup)
+      // ============================================================
+      var MAP_CONFIG = {
+        basemap: "streets-navigation-vector",
+        center:  [106.6966, 10.8131],
+        zoom:    17
+      };
+
+      // ============================================================
+      // 2. KHỞI TẠO MAP & VIEW
+      // ============================================================
+      var map = new Map({ basemap: MAP_CONFIG.basemap });
+
+      var view = new MapView({
+        container: "viewDiv",
+        map:    map,
+        center: MAP_CONFIG.center,
+        zoom:   MAP_CONFIG.zoom,
+        popup: {
+          dockEnabled: true,
+          dockOptions: {
+            position:     "bottom-right",
+            breakpoint:   false,
+            buttonEnabled: true
+          }
+        }
+      });
+
+      // ============================================================
+      // 3. TẠO CÁC LAYER (GraphicsLayer cho từng nhóm đối tượng)
+      // ============================================================
+      var polygonLayer  = new GraphicsLayer({ title: "Khu vực chức năng" });
+      var polylineLayer = new GraphicsLayer({ title: "Tuyến đường nội khu" });
+      var pointLayer    = new GraphicsLayer({ title: "Tiện ích công viên" });
+
+      map.addMany([polygonLayer, polylineLayer, pointLayer]);
+
+      // ============================================================
+      // 4. LOAD DỮ LIỆU TỪ CÁC MODULE THÀNH VIÊN
+      // ============================================================
+      view.when(function () {
+        if (typeof window.initPolygons  === "function") window.initPolygons(polygonLayer);
+        if (typeof window.initPolylines === "function") window.initPolylines(polylineLayer);
+        if (typeof window.initPoints    === "function") window.initPoints(pointLayer);
+
+        console.log("✅ Map initialized – Công viên Gia Định");
+      });
+
+      // ============================================================
+      // 5. WIDGETS (Chương setup)
+      // ============================================================
+      view.when(function () {
+
+        var legend = new Legend({
+          view:      view,
+          container: "legend-container",
+          style:     "card"
+        });
+
+        var scaleBar = new ScaleBar({
+          view: view,
+          unit: "metric"
+        });
+        view.ui.add(scaleBar, "bottom-left");
+
+        var compass = new Compass({ view: view });
+        view.ui.add(compass, "top-right");
+
+        var homeBtn = new Home({ view: view });
+        view.ui.add(homeBtn, "top-left");
+      });
+
+    });
+
+
+    // ============================================================
+    // 6. TOGGLE LEGEND
+    // ============================================================
+    function toggleLegend() {
+      var container = document.getElementById("legend-container");
+      container.style.display =
+        container.style.display === "none" ? "block" : "none";
+    }
+
+  </script>
+
+</body>
+</html>

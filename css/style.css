@@ -1,0 +1,190 @@
+/* ============================================================
+   css/style.css
+   Thành viên phụ trách: TIÊN LA
+   Nhiệm vụ: Thiết kế giao diện tổng thể (Header, Legend, Popup)
+   ============================================================
+
+   MÀU SẮC CHỦ ĐẠO:
+     --green-dark  : #1b5e20  (xanh lá đậm – màu chủ đề công viên)
+     --green-mid   : #2e7d32
+     --green-light : #a5d6a7
+     --accent      : #f9a825  (vàng cam – điểm nhấn)
+     --bg          : #f5f5f5
+
+   TIÊN LA có thể thay đổi màu sắc theo ý thích của nhóm.
+   ============================================================ */
+
+/* ---- Reset & Base ---- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Segoe UI", "Roboto", Arial, sans-serif;
+  background-color: #f0f4f0;
+  overflow: hidden;           /* Không scroll trang, chỉ scroll map */
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+#app-header {
+  background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 60%, #388e3c 100%);
+  color: white;
+  padding: 0 20px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+  z-index: 100;
+  flex-shrink: 0;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+}
+
+.header-logo {
+  width:  40px;
+  height: 40px;
+  object-fit: contain;
+  filter: drop-shadow(0 1px 3px rgba(0,0,0,0.4));
+}
+
+.header-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  line-height: 1.2;
+}
+
+.header-subtitle {
+  font-size: 0.78rem;
+  opacity: 0.85;
+  margin-top: 2px;
+  letter-spacing: 0.2px;
+}
+
+/* ============================================================
+   MAP VIEW
+   ============================================================ */
+#viewDiv {
+  flex: 1;
+  width: 100%;
+  /* chiều cao tự động = 100vh - header */
+}
+
+/* ============================================================
+   LEGEND PANEL
+   ============================================================ */
+#legend-panel {
+  position: absolute;
+  bottom: 30px;
+  left: 15px;
+  z-index: 99;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+  overflow: hidden;
+  min-width: 220px;
+  max-width: 280px;
+  border: 1px solid #c8e6c9;
+}
+
+#legend-toggle {
+  background: #2e7d32;
+  color: white;
+  padding: 9px 14px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.2s;
+  letter-spacing: 0.3px;
+}
+
+#legend-toggle:hover {
+  background: #1b5e20;
+}
+
+#legend-container {
+  padding: 10px;
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+/* Override ArcGIS legend widget style để phù hợp giao diện */
+#legend-container .esri-legend {
+  background: transparent !important;
+  padding: 0 !important;
+}
+
+#legend-container .esri-legend__service-label {
+  font-size: 0.82rem !important;
+  font-weight: 700 !important;
+  color: #1b5e20 !important;
+}
+
+/* ============================================================
+   POPUP TEMPLATE (Phát sẽ kiểm tra layout này)
+   ============================================================ */
+
+/* Tiêu đề popup */
+.esri-popup__header-title {
+  font-size: 1rem !important;
+  font-weight: 700 !important;
+  color: #1b5e20 !important;
+}
+
+/* Nội dung popup */
+.esri-popup__content {
+  font-size: 0.88rem !important;
+  line-height: 1.5 !important;
+}
+
+/* Ảnh trong popup không bị vỡ */
+.esri-popup__content img {
+  width: 100% !important;
+  max-height: 180px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-top: 8px;
+  display: block;
+}
+
+/* ============================================================
+   WIDGETS (ScaleBar, Compass, Home button)
+   ============================================================ */
+.esri-home {
+  border-radius: 6px !important;
+}
+
+.esri-scale-bar {
+  background: rgba(255,255,255,0.85) !important;
+  padding: 4px 8px !important;
+  border-radius: 6px !important;
+}
+
+/* ============================================================
+   RESPONSIVE – tablet và mobile
+   ============================================================ */
+@media (max-width: 600px) {
+  .header-title    { font-size: 1rem; }
+  .header-subtitle { display: none; }
+  #app-header      { height: 50px; padding: 0 12px; }
+
+  #legend-panel {
+    bottom: 15px;
+    left: 10px;
+    max-width: 220px;
+  }
+}
