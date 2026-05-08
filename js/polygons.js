@@ -17,8 +17,7 @@
 
 var popup_template_polygon = {
   title: "{Name}",
-  content:
-    "{Description}<br/><img src='{ImageUrl}' style='width:100%;border-radius:8px;margin-top:8px;'/>",
+  content: "{Description}<br/><img src='{ImageUrl}' style='width:100%;border-radius:8px;margin-top:8px;'/>",
 };
 
 var jsondata_polygons = {
@@ -35,13 +34,11 @@ var jsondata_polygons = {
       symbol: {
         type: "simple-fill",
         color: [255, 215, 0, 0.5],
-        outline: { color: [184, 134, 11], width: 2 },
+        outline: {color: [184, 134, 11], width: 2},
       },
       Name: "Khu vui chơi trẻ em",
-      Description:
-        "Khu vực vui chơi giải trí dành riêng cho trẻ em với các thiết bị leo trèo, cầu trượt và xích đu.",
-      ImageUrl:
-        "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Gatto_europeo4.jpg/320px-Gatto_europeo4.jpg",
+      Description: "Khu vực vui chơi giải trí dành riêng cho trẻ em với các thiết bị leo trèo, cầu trượt và xích đu.",
+      ImageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Gatto_europeo4.jpg/320px-Gatto_europeo4.jpg",
       popupTemplate: popup_template_polygon,
     },
 
@@ -62,13 +59,12 @@ var jsondata_polygons = {
       symbol: {
         type: "simple-fill",
         color: [160, 196, 255, 0.5],
-        outline: { color: [30, 100, 200], width: 2 },
+        outline: {color: [30, 100, 200], width: 2},
       },
       Name: "Quảng trường trung tâm",
       Description:
         "Khu vực quảng trường rộng lớn ở trung tâm công viên, thường tổ chức sự kiện văn hóa và biểu diễn nghệ thuật.",
-      ImageUrl:
-        "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Gatto_europeo4.jpg/320px-Gatto_europeo4.jpg",
+      ImageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Gatto_europeo4.jpg/320px-Gatto_europeo4.jpg",
       popupTemplate: popup_template_polygon,
     },
 
@@ -85,13 +81,32 @@ var jsondata_polygons = {
       symbol: {
         type: "simple-fill",
         color: [100, 210, 255, 0.6],
-        outline: { color: [0, 120, 180], width: 2 },
+        outline: {color: [0, 120, 180], width: 2},
       },
       Name: "Hồ nước lớn",
-      Description:
-        "Hồ nước tự nhiên rộng lớn, điểm nhấn cảnh quan của công viên, phục vụ câu cá và ngắm cảnh.",
-      ImageUrl:
-        "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Gatto_europeo4.jpg/320px-Gatto_europeo4.jpg",
+      Description: "Hồ nước tự nhiên rộng lớn, điểm nhấn cảnh quan của công viên, phục vụ câu cá và ngắm cảnh.",
+      ImageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Gatto_europeo4.jpg/320px-Gatto_europeo4.jpg",
+      popupTemplate: popup_template_polygon,
+    },
+    {
+      type: "polygon",
+      rings: [
+        [106.67360244013969, 10.811872009895254],
+        [106.67275089187768, 10.81092684031897],
+        [106.67324478986964, 10.810345517729116],
+        [106.67405801845987, 10.81119449926223],
+        [106.67393454396188, 10.811374332480634],
+        [106.6740239565294, 10.811537436934358],
+        [106.67360244013969, 10.811872009895254],
+      ],
+      symbol: {
+        type: "simple-fill",
+        color: [247, 131, 172, 0.5],
+        outline: {color: [0, 120, 180], width: 2},
+      },
+      Name: "Khu vực mạng cây xanh, cây lâu năm",
+      Description: "Hồ nước tự nhiên rộng lớn, điểm nhấn cảnh quan của công viên, phục vụ câu cá và ngắm cảnh.",
+      ImageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Gatto_europeo4.jpg/320px-Gatto_europeo4.jpg",
       popupTemplate: popup_template_polygon,
     },
 
@@ -107,13 +122,11 @@ var jsondata_polygons = {
       symbol: {
         type: "simple-fill",
         color: [178, 242, 187, 0.6],
-        outline: { color: [30, 160, 60], width: 2 },
+        outline: {color: [30, 160, 60], width: 2},
       },
       Name: "Khu máy tập thể dục ngoài trời",
-      Description:
-        "Khu vực trang bị nhiều loại máy tập thể dục ngoài trời miễn phí cho người dân tập luyện sức khỏe.",
-      ImageUrl:
-        "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Gatto_europeo4.jpg/320px-Gatto_europeo4.jpg",
+      Description: "Khu vực trang bị nhiều loại máy tập thể dục ngoài trời miễn phí cho người dân tập luyện sức khỏe.",
+      ImageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Gatto_europeo4.jpg/320px-Gatto_europeo4.jpg",
       popupTemplate: popup_template_polygon,
     },
 
@@ -129,13 +142,11 @@ var jsondata_polygons = {
       symbol: {
         type: "simple-fill",
         color: [206, 212, 218, 0.7],
-        outline: { color: [80, 80, 80], width: 2 },
+        outline: {color: [80, 80, 80], width: 2},
       },
       Name: "Bãi giữ xe",
-      Description:
-        "Khu bãi giữ xe có sức chứa lớn phục vụ khách tham quan, có bảo vệ 24/7.",
-      ImageUrl:
-        "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Gatto_europeo4.jpg/320px-Gatto_europeo4.jpg",
+      Description: "Khu bãi giữ xe có sức chứa lớn phục vụ khách tham quan, có bảo vệ 24/7.",
+      ImageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Gatto_europeo4.jpg/320px-Gatto_europeo4.jpg",
       popupTemplate: popup_template_polygon,
     },
 
@@ -150,14 +161,13 @@ var jsondata_polygons = {
       ],
       symbol: {
         type: "simple-fill",
-        color: [247, 131, 172, 0.5],
-        outline: { color: [180, 40, 90], width: 2 },
+        color: [255, 216, 168, 0.5],
+        outline: {color: [180, 40, 90], width: 2},
       },
-      Name: "Vườn hoa & cảnh quan",
+      Name: "Khu vực pinic",
       Description:
-        "Khu vườn hoa đủ màu sắc theo mùa, thảm cỏ xanh được chăm sóc kỹ lưỡng, điểm check-in yêu thích.",
-      ImageUrl:
-        "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Gatto_europeo4.jpg/320px-Gatto_europeo4.jpg",
+        "Khu vực pinic mát mẻ, thảm cỏ xanh được chăm sóc kỹ lưỡng, điểm để pinic cuối tuần cho gia đình, bạn bè",
+      ImageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Gatto_europeo4.jpg/320px-Gatto_europeo4.jpg",
       popupTemplate: popup_template_polygon,
     },
   ],
@@ -178,10 +188,6 @@ window.initPolygons = function (polygonLayer) {
       polygonLayer.add(createGraphic(data));
     });
 
-    console.log(
-      "✅ polygons.js: Đã thêm " +
-        jsondata_polygons.polygons.length +
-        " đa giác vào bản đồ",
-    );
+    console.log("✅ polygons.js: Đã thêm " + jsondata_polygons.polygons.length + " đa giác vào bản đồ");
   });
 };

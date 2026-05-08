@@ -6,10 +6,7 @@
     <title>Bản đồ Công viên Gia Định – IE402</title>
 
     <!-- ArcGIS API for JavaScript 4.x (CDN) -->
-    <link
-      rel="stylesheet"
-      href="https://js.arcgis.com/4.29/esri/themes/light/main.css"
-    />
+    <link rel="stylesheet" href="https://js.arcgis.com/4.29/esri/themes/light/main.css" />
     <script src="https://js.arcgis.com/4.29/"></script>
 
     <!-- Custom styles (Tiên La phụ trách) -->
@@ -21,17 +18,10 @@
        ====================================================== -->
     <header id="app-header">
       <div class="header-content">
-        <img
-          src="assets/icons/park-logo.png"
-          alt="Logo"
-          class="header-logo"
-          onerror="this.style.display = 'none'"
-        />
+        <img src="assets/icons/park-logo.png" alt="Logo" class="header-logo" onerror="this.style.display = 'none'" />
         <div class="header-text">
           <h1 class="header-title">🌳 Bản đồ Công viên Gia Định</h1>
-          <p class="header-subtitle">
-            Hệ thống thông tin địa lý – IE402 | Nhóm: ___________
-          </p>
+          <p class="header-subtitle">Hệ thống thông tin địa lý – IE402 | Nhóm: ___________</p>
         </div>
       </div>
     </header>
@@ -69,15 +59,7 @@
         "esri/widgets/ScaleBar",
         "esri/widgets/Compass",
         "esri/widgets/Home",
-      ], function (
-        Map,
-        MapView,
-        GraphicsLayer,
-        Legend,
-        ScaleBar,
-        Compass,
-        Home,
-      ) {
+      ], function (Map, MapView, GraphicsLayer, Legend, ScaleBar, Compass, Home) {
         // ============================================================
         // 1. CẤU HÌNH BẢN ĐỒ (Chương setup)
         // ============================================================
@@ -90,7 +72,7 @@
         // ============================================================
         // 2. KHỞI TẠO MAP & VIEW
         // ============================================================
-        var map = new Map({ basemap: MAP_CONFIG.basemap });
+        var map = new Map({basemap: MAP_CONFIG.basemap});
 
         var view = new MapView({
           container: "viewDiv",
@@ -110,9 +92,9 @@
         // ============================================================
         // 3. TẠO CÁC LAYER (GraphicsLayer cho từng nhóm đối tượng)
         // ============================================================
-        var polygonLayer = new GraphicsLayer({ title: "Khu vực chức năng" });
-        var polylineLayer = new GraphicsLayer({ title: "Tuyến đường nội khu" });
-        var pointLayer = new GraphicsLayer({ title: "Tiện ích công viên" });
+        var polygonLayer = new GraphicsLayer({title: "Khu vực chức năng"});
+        var polylineLayer = new GraphicsLayer({title: "Tuyến đường nội khu"});
+        var pointLayer = new GraphicsLayer({title: "Tiện ích công viên"});
 
         map.addMany([polygonLayer, polylineLayer, pointLayer]);
 
@@ -120,12 +102,9 @@
         // 4. LOAD DỮ LIỆU TỪ CÁC MODULE THÀNH VIÊN
         // ============================================================
         view.when(function () {
-          if (typeof window.initPolygons === "function")
-            window.initPolygons(polygonLayer);
-          if (typeof window.initPolylines === "function")
-            window.initPolylines(polylineLayer);
-          if (typeof window.initPoints === "function")
-            window.initPoints(pointLayer);
+          if (typeof window.initPolygons === "function") window.initPolygons(polygonLayer);
+          if (typeof window.initPolylines === "function") window.initPolylines(polylineLayer);
+          if (typeof window.initPoints === "function") window.initPoints(pointLayer);
 
           console.log("✅ Map initialized – Công viên Gia Định");
         });
@@ -146,10 +125,10 @@
           });
           view.ui.add(scaleBar, "bottom-left");
 
-          var compass = new Compass({ view: view });
+          var compass = new Compass({view: view});
           view.ui.add(compass, "top-right");
 
-          var homeBtn = new Home({ view: view });
+          var homeBtn = new Home({view: view});
           view.ui.add(homeBtn, "top-left");
         });
       });
@@ -159,8 +138,7 @@
       // ============================================================
       function toggleLegend() {
         var container = document.getElementById("legend-container");
-        container.style.display =
-          container.style.display === "none" ? "block" : "none";
+        container.style.display = container.style.display === "none" ? "block" : "none";
       }
     </script>
   </body>
