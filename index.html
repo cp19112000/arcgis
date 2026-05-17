@@ -3,21 +3,18 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Bản đồ 2D Công viên Gia Định – IE402 | Nhóm 1</title>
-
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌳</text></svg>" />
-
+    <title>Bản đồ 3D Nhà thờ Đức Bà Sài Gòn – IE402 | LOD0→3.3</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⛪</text></svg>" />
     <link rel="stylesheet" href="https://js.arcgis.com/4.29/esri/themes/light/main.css" />
     <script src="https://js.arcgis.com/4.29/"></script>
-
     <link rel="stylesheet" href="css/style.css" />
   </head>
   <body>
     <header id="app-header">
       <div class="header-content">
         <div class="header-text">
-          <h1 class="header-title">🌳 Bản đồ 2D Công viên Gia Định – LOD3.3</h1>
-          <p class="header-subtitle">Hệ thống thông tin địa lý 3 chiều – IE402 | Nhóm 1: Công viên Gia Định, TP. Hồ Chí Minh</p>
+          <h1 class="header-title">⛪ Nhà thờ Đức Bà Sài Gòn – LOD0→LOD3.3</h1>
+          <p class="header-subtitle">Hệ thống thông tin địa lý 3 chiều – IE402 | Nhóm 1: Công xã Paris, Quận 1, TP. Hồ Chí Minh</p>
         </div>
       </div>
     </header>
@@ -25,100 +22,188 @@
     <div id="viewDiv">
       <div id="loading-overlay">
         <div class="spinner"></div>
-        <p>Đang tải bản đồ Công viên Gia Định…</p>
+        <p>Đang tải bản đồ Nhà thờ Đức Bà Sài Gòn…</p>
       </div>
-    </div>
 
-    <div id="legend-panel">
-      <div id="legend-toggle" onclick="toggleLegend()">📖 Chú giải</div>
-      <div id="legend-container"></div>
     </div>
 
     <div id="info-panel">
-      <div class="info-title">📐 LOD3.3 – Chi tiết kiến trúc</div>
+      <div class="info-title">📐 Chi tiết LOD (2D Simulation)</div>
       <div class="info-content">
-        <span class="lod-badge">LOD3</span> Mặt bằng chi tiết: tường, mái, cửa sổ, cửa ra vào, cột
+        <span class="lod-badge">LOD0</span> Cảnh quan, giao thông<br/>
+        <span class="lod-badge">LOD1</span> Khối móng chữ thập<br/>
+        <span class="lod-badge">LOD2</span> Mái dốc, chóp tháp 8 múi<br/>
+        <span class="lod-badge">LOD3</span> 56 cửa sổ, 40 trụ bích, rose window
       </div>
     </div>
 
-    <script src="js/park_boundary.js"></script>
-    <script src="js/buildings_lod3.js"></script>
-    <script src="js/features.js"></script>
+
+
+    <script src="js/basilica_utils.js"></script>
+    <script src="js/lod0_terrain_2d.js"></script>
+    <script src="js/lod1_blocks_2d.js"></script>
+    <script src="js/lod2_roofs_2d.js"></script>
+    <script src="js/lod3_details_2d.js"></script>
+    <script src="js/features_2d.js"></script>
 
     <script>
       require([
         "esri/Map",
-        "esri/views/MapView",
+        "esri/views/SceneView", "esri/Graphic",
         "esri/layers/GraphicsLayer",
-        "esri/widgets/Legend",
+        "esri/layers/GroupLayer",
         "esri/widgets/ScaleBar",
-        "esri/widgets/Compass",
         "esri/widgets/Home",
         "esri/widgets/LayerList",
-      ], function (Map, MapView, GraphicsLayer, Legend, ScaleBar, Compass, Home, LayerList) {
+        "esri/widgets/Compass",
+        ], function (Map, SceneView, Graphic, GraphicsLayer, GroupLayer, ScaleBar, Home, LayerList, Compass) {
 
-        var map = new Map({
-          basemap: "satellite"
+        window.Graphic = Graphic; // Cung cấp cho basilica_utils.js để tạo Graphic instance (g = window)
+        var map = new Map({ basemap: "osm", ground: "world-elevation" });
+
+        // ========== Layer declarations ==========
+        var lod0_1 = new GraphicsLayer({ title: "LOD 0.1 – Mặt đất & Thảm cỏ", listMode: "show", elevationInfo: { mode: "on-the-ground" } });
+        var lod0_2 = new GraphicsLayer({ title: "LOD 0.2 – Giao thông", listMode: "show", elevationInfo: { mode: "on-the-ground" } });
+        var lod0_3 = new GraphicsLayer({ title: "LOD 0.3 – Công trình phụ", listMode: "show", elevationInfo: { mode: "on-the-ground" } });
+        var group0 = new GroupLayer({
+          title: "LOD 0 – Cảnh quan & Giao thông",
+          layers: [lod0_1, lod0_2, lod0_3],
+          listMode: "show"
         });
 
-        var view = new MapView({
+        var lod1_1 = new GraphicsLayer({ title: "LOD 1.1 – Gian chính", listMode: "show", elevationInfo: { mode: "relative-to-ground" } });
+        var lod1_2 = new GraphicsLayer({ title: "LOD 1.2 – Hậu cung", listMode: "show", elevationInfo: { mode: "relative-to-ground" } });
+        var lod1_3 = new GraphicsLayer({ title: "LOD 1.3 – Tháp & Phụ trợ", listMode: "show", elevationInfo: { mode: "relative-to-ground" } });
+        var group1 = new GroupLayer({
+          title: "LOD 1 – Khối nền (Footprint)",
+          layers: [lod1_1, lod1_2, lod1_3],
+          listMode: "show"
+        });
+
+        var lod2_1 = new GraphicsLayer({ title: "LOD 2.1 – Mái chính & Hậu cung", listMode: "show", elevationInfo: { mode: "relative-to-ground", offset: 20 } });
+        var lod2_2 = new GraphicsLayer({ title: "LOD 2.2 – Mái phụ (Nhà nguyện)", listMode: "show", elevationInfo: { mode: "relative-to-ground", offset: 8 } });
+        var lod2_3 = new GraphicsLayer({ title: "LOD 2.3 – Tháp chuông & Thánh giá", listMode: "show", elevationInfo: { mode: "relative-to-ground", offset: 60.5 } });
+        var group2 = new GroupLayer({
+          title: "LOD 2 – Mái & Tháp (2D Shading)",
+          layers: [lod2_1, lod2_2, lod2_3],
+          listMode: "show"
+        });
+
+        var lod3_1 = new GraphicsLayer({ title: "LOD 3.1 – Trụ bích", listMode: "show", elevationInfo: { mode: "relative-to-ground" } });
+        var lod3_2 = new GraphicsLayer({ title: "LOD 3.2 – Cửa đi & Bậc thềm", listMode: "show", elevationInfo: { mode: "relative-to-ground", offset: 0.5 } });
+        var lod3_3 = new GraphicsLayer({ title: "LOD 3.3 – Cửa sổ & Rose Window", listMode: "show", elevationInfo: { mode: "relative-to-ground", offset: 12 } });
+        var group3 = new GroupLayer({
+          title: "LOD 3 – Chi tiết kiến trúc",
+          layers: [lod3_1, lod3_2, lod3_3],
+          listMode: "show"
+        });
+
+        var featLayer = new GraphicsLayer({ title: "Tiện ích – Cây xanh – Tượng đài", listMode: "show", elevationInfo: { mode: "on-the-ground" } });
+        map.addMany([group0, group1, group2, group3, featLayer]);
+
+        // ========== SceneView 3D (Single View) ==========
+        var view = new SceneView({
           container: "viewDiv",
           map: map,
-          center: [106.677, 10.8115],
-          zoom: 16,
-          scale: 3000,
-          popup: {
-            dockEnabled: true,
-            dockOptions: {
-              position: "bottom-right",
-              breakpoint: false,
-              buttonEnabled: true
-            }
-          }
+          qualityProfile: "low",
+          camera: {
+            position: { longitude: 106.70000, latitude: 10.77800, z: 280 },
+            tilt: 50,
+            heading: 310
+          },
+          environment: {
+            lighting: { directShadowsEnabled: false }
+          },
+          popup: { dockEnabled: true, dockOptions: { position: "top-right", breakpoint: false, buttonEnabled: true } }
         });
 
         var loadingEl = document.getElementById("loading-overlay");
 
-        var parkLayer = new GraphicsLayer({ title: "Công viên & Cảnh quan", listMode: "show" });
-        var buildingLayer = new GraphicsLayer({ title: "Công trình LOD3.3", listMode: "show" });
-        var detailLayer = new GraphicsLayer({ title: "Chi tiết kiến trúc (cửa sổ, cửa, cột)", listMode: "show" });
-        var featureLayer = new GraphicsLayer({ title: "Tiện ích & Cây xanh", listMode: "show" });
+        // Manual legend colors
+        var manualLegendHTML =
+          '<div style="font-size:0.78rem;line-height:1.6;margin-top:6px">' +
+          '<span style="display:inline-block;width:14px;height:10px;background:#a89880;border:1px solid #666;margin-right:4px"></span> Khối nền' +
+          ' <span style="display:inline-block;width:14px;height:10px;background:#b5542d;border:1px solid #666;margin-right:4px;margin-left:6px"></span> Mái' +
+          ' <span style="display:inline-block;width:14px;height:10px;background:#3280c8;border:1px solid #666;margin-right:4px;margin-left:6px"></span> Cửa sổ' +
+          ' <span style="display:inline-block;width:14px;height:10px;background:#4a8c3a;border:1px solid #666;margin-right:4px;margin-left:6px"></span> Cây xanh' +
+          '</div>';
 
-        map.addMany([parkLayer, buildingLayer, detailLayer, featureLayer]);
-
-        view.when(function () {
-          if (typeof window.initParkBoundary === "function") window.initParkBoundary(parkLayer);
-          if (typeof window.initBuildingsLOD3 === "function") window.initBuildingsLOD3(buildingLayer, detailLayer);
-          if (typeof window.initFeatures === "function") window.initFeatures(featureLayer);
-
-          var legend = new Legend({
-            view: view,
-            container: "legend-container",
-            style: "card"
+        // Minimize button for popup
+        function addMinimizeBtn(view) {
+          view.popup.watch("visible", function(visible) {
+            if (visible) {
+              setTimeout(function() {
+                var header = document.querySelector(".esri-popup__header");
+                if (header && !document.getElementById("popup-minimize-btn")) {
+                  var btn = document.createElement("button");
+                  btn.id = "popup-minimize-btn";
+                  btn.innerHTML = "−";
+                  btn.title = "Thu gọn popup";
+                  btn.style.cssText = "position:absolute;right:40px;top:8px;background:none;border:none;font-size:16px;cursor:pointer;color:#555;";
+                  btn.onclick = function() {
+                    var content = document.querySelector(".esri-popup__content");
+                    var footer = document.querySelector(".esri-popup__footer");
+                    var collapsed = content.style.display === "none";
+                    content.style.display = collapsed ? "" : "none";
+                    if (footer) footer.style.display = collapsed ? "" : "none";
+                    btn.innerHTML = collapsed ? "−" : "+";
+                  };
+                  header.style.position = "relative";
+                  header.appendChild(btn);
+                }
+              }, 100);
+            }
           });
+        }
 
-          var scaleBar = new ScaleBar({ view: view, unit: "metric" });
-          view.ui.add(scaleBar, "bottom-left");
+        // Init layers + widgets
+        function initApp() {
+          if (typeof window.loadLOD0 === "function") window.loadLOD0({ lod0_1: lod0_1, lod0_2: lod0_2, lod0_3: lod0_3 });
+          if (typeof window.loadLOD1 === "function") window.loadLOD1({ lod1_1: lod1_1, lod1_2: lod1_2, lod1_3: lod1_3 });
+          if (typeof window.loadLOD2 === "function") window.loadLOD2({ lod2_1: lod2_1, lod2_2: lod2_2, lod2_3: lod2_3 });
+          if (typeof window.loadLOD3 === "function") window.loadLOD3({ lod3_1: lod3_1, lod3_2: lod3_2, lod3_3: lod3_3 });
+          if (typeof window.loadFeatures === "function") window.loadFeatures(featLayer);
 
-          var layerList = new LayerList({ view: view });
-          view.ui.add(layerList, "top-right");
+          var infoContent = document.querySelector("#info-panel .info-content");
+          if (infoContent) infoContent.insertAdjacentHTML("beforeend", manualLegendHTML);
 
-          var homeBtn = new Home({ view: view });
+          // Widgets
+          view.ui.add(new ScaleBar({ view: view, unit: "metric" }), "bottom-left");
+          var layerList = new LayerList({
+            view: view,
+            listItemCreatedFunction: function(event) {
+              var item = event.item;
+              if (item.title.indexOf("Tiện ích") !== -1) {
+                item.visibilityToggleEnabled = false; // Click tên không toggle visibility
+              }
+            }
+          });
+          view.ui.add(layerList, "bottom-right");
+          var homeBtn = new Home({
+            view: view,
+            goToOverride: function(v, target) {
+              return v.goTo({ target: [106.69891, 10.77980], zoom: 18, tilt: 50, heading: 310 });
+            }
+          });
           view.ui.add(homeBtn, "top-left");
+          view.ui.add(new Compass({ view: view }), "top-left");
 
           if (loadingEl) loadingEl.style.display = "none";
+          console.log("✅ Notre-Dame Saigon 3D ready");
+        }
 
-          console.log("✅ Map initialized – Công viên Gia Định, TP.HCM (LOD3.3)");
+        view.when(function () {
+          initApp();
+          addMinimizeBtn(view);
+          // Explicit goTo để camera hội tụ đúng tâm nhà thờ
+          view.goTo({ target: [106.69891, 10.77980], zoom: 18, tilt: 50, heading: 310 });
         }, function (err) {
-          if (loadingEl) loadingEl.innerHTML = "<p style='color:#c0392b;padding:20px;'>Lỗi tải bản đồ: " + err + "</p>";
-          console.error("❌ Map init error:", err);
+          if (loadingEl) loadingEl.innerHTML = "<p style='color:#c0392b;padding:20px;'>Lỗi: " + err + "</p>";
+          console.error("❌ SceneView init error:", err);
         });
+
       });
 
-      function toggleLegend() {
-        var container = document.getElementById("legend-container");
-        container.style.display = container.style.display === "none" ? "block" : "none";
-      }
     </script>
   </body>
 </html>

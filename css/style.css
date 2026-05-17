@@ -1,12 +1,12 @@
 /* ============================================================
-   css/style.css – Công viên Gia Định (Theme Xanh lá cây)
+   css/style.css – Nhà thờ Đức Bà Sài Gòn (Theme Cổ điển)
    ============================================================
    MÀU SẮC CHỦ ĐẠO:
-     --park-green   : #2d7d46  (xanh lá cây viên)
-     --park-blue    : #2a6b96  (xanh dương hồ nước)
-     --park-cream   : #f0e6d0  (kem đá)
-     --park-brown   : #8b6b4d  (nâu gỗ/đất)
-     --park-gold    : #c9a84c  (vàng hoa)
+     --stone-brown  : #8b6b4d  (nâu đá)
+     --stone-gray   : #a89880  (xám đá)
+     --gold         : #c9a84c  (vàng)
+     --cream        : #f0e6d0  (kem đá)
+     --roof-red     : #b5542d  (đỏ ngói)
    ============================================================ */
 
 *, *::before, *::after {
@@ -17,7 +17,7 @@
 
 body {
   font-family: "Segoe UI", "Roboto", Arial, sans-serif;
-  background-color: #dce8d4;
+  background-color: #d4d0c8;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -25,16 +25,16 @@ body {
 }
 
 /* ============================================================
-   HEADER – Xanh lá cây
+   HEADER – Nâu đá
    ============================================================ */
 #app-header {
-  background: linear-gradient(135deg, #2d7d46 0%, #4a9e5c 50%, #6abf72 100%);
+  background: linear-gradient(135deg, #6b4c3b 0%, #8b6b4d 50%, #a08060 100%);
   color: white;
   padding: 0 20px;
   height: 60px;
   display: flex;
   align-items: center;
-  box-shadow: 0 3px 12px rgba(45, 125, 70, 0.4);
+  box-shadow: 0 3px 12px rgba(107, 76, 59, 0.4);
   z-index: 100;
   flex-shrink: 0;
 }
@@ -72,9 +72,9 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: #dce8d4;
+  background: #d4d0c8;
   z-index: 200;
-  color: #2d7d46;
+  color: #6b4c3b;
   font-size: 1.1rem;
   font-weight: 600;
   gap: 16px;
@@ -82,8 +82,8 @@ body {
 
 .spinner {
   width: 48px; height: 48px;
-  border: 5px solid rgba(45, 125, 70, 0.2);
-  border-top-color: #2d7d46;
+  border: 5px solid rgba(107, 76, 59, 0.2);
+  border-top-color: #6b4c3b;
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
@@ -102,84 +102,33 @@ body {
 }
 
 /* ============================================================
-   LEGEND PANEL
-   ============================================================ */
-#legend-panel {
-  position: absolute;
-  bottom: 30px;
-  left: 15px;
-  z-index: 99;
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 10px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
-  overflow: hidden;
-  min-width: 220px;
-  max-width: 280px;
-  border: 1px solid rgba(45, 125, 70, 0.3);
-  backdrop-filter: blur(4px);
-}
-
-#legend-toggle {
-  background: #2d7d46;
-  color: white;
-  padding: 9px 14px;
-  font-size: 0.88rem;
-  font-weight: 600;
-  cursor: pointer;
-  user-select: none;
-  transition: background 0.2s;
-  letter-spacing: 0.3px;
-}
-
-#legend-toggle:hover {
-  background: #1e5c32;
-}
-
-#legend-container {
-  padding: 10px;
-  max-height: 320px;
-  overflow-y: auto;
-}
-
-#legend-container .esri-legend {
-  background: transparent !important;
-  padding: 0 !important;
-}
-
-#legend-container .esri-legend__service-label {
-  font-size: 0.82rem !important;
-  font-weight: 700 !important;
-  color: #2d7d46 !important;
-}
-
-/* ============================================================
    LOD INFO PANEL
    ============================================================ */
 #info-panel {
   position: absolute;
-  top: 75px;
-  right: 15px;
-  z-index: 99;
+  bottom: 80px;
+  left: 10px;
+  z-index: 10;
   background: rgba(255, 255, 255, 0.95);
   border-radius: 10px;
   box-shadow: 0 4px 16px rgba(0,0,0,0.2);
   padding: 12px 16px;
   max-width: 260px;
-  border: 1px solid rgba(45, 125, 70, 0.3);
+  border: 1px solid rgba(107, 76, 59, 0.3);
   backdrop-filter: blur(4px);
   font-size: 0.82rem;
 }
 
 .info-title {
   font-weight: 700;
-  color: #2d7d46;
+  color: #6b4c3b;
   margin-bottom: 6px;
   font-size: 0.88rem;
 }
 
 .lod-badge {
   display: inline-block;
-  background: #2d7d46;
+  background: #6b4c3b;
   color: white;
   font-weight: 700;
   font-size: 0.72rem;
@@ -199,7 +148,7 @@ body {
 .esri-popup__header-title {
   font-size: 1rem !important;
   font-weight: 700 !important;
-  color: #2d7d46 !important;
+  color: #6b4c3b !important;
 }
 
 .esri-popup__content {
@@ -235,7 +184,17 @@ body {
   border-radius: 8px !important;
   box-shadow: 0 2px 8px rgba(0,0,0,0.15) !important;
   max-height: 250px !important;
+  max-width: 240px !important;
   overflow-y: auto !important;
+  font-size: 12px !important;
+}
+
+/* ============================================================
+   POPUP DOCK – Tránh đè lên Header
+   ============================================================ */
+.esri-popup--is-docked-top-right {
+  top: 60px !important;
+  right: 10px !important;
 }
 
 /* ============================================================
@@ -246,10 +205,4 @@ body {
   .header-subtitle { display: none; }
   #app-header      { height: 50px; padding: 0 12px; }
   #info-panel      { display: none; }
-
-  #legend-panel {
-    bottom: 15px;
-    left: 10px;
-    max-width: 220px;
-  }
 }

@@ -1,9 +1,9 @@
-# Bản đồ 2D Công viên Gia Định – IE402 (LOD3.3)
+# Bản đồ 2D Nhà thờ Đức Bà Sài Gòn – IE402 (LOD0→LOD3.3)
 
 > **Môn học:** Hệ Thống Thông Tin Địa Lý 3 Chiều (IE402)  
-> **Đề tài:** Bản đồ 2D Công viên Gia Định – TP. Hồ Chí Minh  
-> **Mức chi tiết:** LOD3.3 (CityGML Architectural Model – ngoại thất)  
-> **Công nghệ:** ArcGIS API for JavaScript 4.29 (MapView 2D, SimpleFillSymbol, SimpleMarkerSymbol)
+> **Đề tài:** Bản đồ 2D Nhà thờ Đức Bà Sài Gòn – Quận 1, TP. Hồ Chí Minh  
+> **Mức chi tiết:** LOD0 (cảnh quan) → LOD3.3 (chi tiết kiến trúc mô phỏng 3D trên 2D)  
+> **Công nghệ:** ArcGIS API for JavaScript 4.29 (MapView 2D, GraphicsLayer, SimpleFillSymbol, PictureMarkerSymbol)
 
 ---
 
@@ -11,59 +11,60 @@
 
 ```
 arcgis/
-├── index.html                ← MapView, AMD require(), widgets, LayerList
+├── index.html                    ← MapView, AMD require(), widgets, LayerList
 ├── css/
-│   └── style.css             ← Theme xanh lá cây, popup, legend, LOD badge
+│   └── style.css                 ← Theme nâu đá cổ điển
 ├── js/
-│   ├── park_boundary.js      ← Ranh giới, zone, hồ nước, thảm cỏ, đường đi, bãi xe
-│   ├── buildings_lod3.js     ← 9 công trình LOD3 (tường + mái + cửa sổ + cửa + cột)
-│   └── features.js           ← Cây xanh, ghế đá, trạm TDTT, đài phun, biển chỉ dẫn
+│   ├── basilica_utils.js         ← Hằng số, hàm chuyển mét→độ, shape factory
+│   ├── lod0_terrain_2d.js        ← Quảng trường, đường xá, thảm cỏ, bãi đỗ
+│   ├── lod1_blocks_2d.js         ← Footprint hình chữ thập + khối phụ
+│   ├── lod2_roofs_2d.js          ← Mái dốc, tháp chuông 8 múi, chóp nhọn
+│   ├── lod3_details_2d.js        ← 56 cửa sổ, 40 trụ bích, rose window, cửa vòm
+│   └── features_2d.js            ← Tượng Đức Mẹ, hàng rào, cây xanh, đèn đường
 └── README.md
 ```
 
-## Mức chi tiết LOD3.3
+## Mức chi tiết LOD
 
-| Bộ phận | Thể hiện trên bản đồ | Kỹ thuật ArcGIS |
+| LOD | Mô tả | Đối tượng | Số lượng |
+|---|---|---|---|
+| **LOD0** | Cảnh quan, giao thông | Quảng trường Công xã Paris, đường Đồng Khởi/Lê Duẩn/Phạm Ngọc Thạch, thảm cỏ, bãi đỗ | 10 polygon |
+| **LOD1** | Khối nền (footprint) | Gian chính (Nave), cánh ngang (Transept), hậu cung (Apse), 2 tháp chuông, narthex, 2 phòng thánh | 9 polygon |
+| **LOD2** | Mái & tháp (2D shading) | Mái dốc sáng/tối, mái cánh ngang, mái hậu cung, 5 nhà nguyện, tháp bát giác 4 múi, thánh giá | 20 polygon + 2 polyline |
+| **LOD3** | Chi tiết kiến trúc | 56 cửa sổ kính màu, rose window 8 cánh, 3 cửa vòm, 40 trụ bích, bậc tam cấp, gờ chỉ, trụ bay | ~90 polygon/polyline |
+| **Features** | Tiện ích | Tượng Đức Mẹ, thánh giá nóc, hàng rào sắt, 4 cổng, 12 cây xanh, 8 đèn, 6 ghế, biển chỉ dẫn | 1 point + 1 polyline + 35 features |
+
+## Thông số kiến trúc
+
+| Thông số | Giá trị |
+|---|---|
+| Chiều dài tổng thể | 93m |
+| Chiều rộng gian chính | 35m |
+| Cao độ đỉnh tháp chuông | 60.5m |
+| Cao độ mái chính | ~21m |
+| Số cửa sổ kính màu | 56 (hãng Lorin, Pháp) |
+| Số trụ bích (buttresses) | ~40 |
+| Số cửa vòm mặt tiền | 3 |
+| Mặt bằng | Hình chữ thập (Basilica cruciform) |
+
+## Tọa độ trung tâm
+
+| Thông tin | Giá trị |
+|---|---|
+| Công trình | Nhà thờ Đức Bà Sài Gòn |
+| Tọa độ | `[106.699, 10.7797]` (WGS84) |
+| Zoom | 18 (~scale 1:1500) |
+| Năm xây dựng | 1863–1880 |
+
+## Coding Convention
+
+| Rule | Đúng | Sai |
 |---|---|---|
-| **WallSurface** (tường) | Footprint màu kem/gạch | `SimpleFillSymbol` nét liền |
-| **RoofSurface** (mái) | Polygon đua rộng hơn tường | `SimpleFillSymbol` nét đứt (dash) |
-| **Window** (cửa sổ) | Hình chữ nhật xanh dương | `SimpleFillSymbol` màu kính |
-| **Door** (cửa) | Hình chữ nhật nâu | `SimpleFillSymbol` màu gỗ |
-| **Column** (cột) | Hình vuông xám | `SimpleFillSymbol` màu ghi |
-
-> **Tổng số:** 9 công trình × (1 tường + 1 mái + N cửa sổ + N cửa + N cột) = ~80+ đối tượng LOD3
-
-## Công trình LOD3
-
-| # | Công trình | Khu | Wall | Roof | Windows | Doors | Columns |
-|---|---|---|---|---|---|---|---|
-| 1 | Nhà hành chính | GĐ1 | ✅ | ✅ | 4 | 1 | 2 |
-| 2 | Chòi nghỉ chân 1 | GĐ1 | ✅ | ✅ | 0 | 1 | 4 |
-| 3 | Chòi nghỉ chân 2 | GĐ2 | ✅ | ✅ | 0 | 1 | 4 |
-| 4 | Nhà vệ sinh 1 | GĐ1 | ✅ | ✅ | 1 | 2 | 0 |
-| 5 | Nhà vệ sinh 2 | GĐ2 | ✅ | ✅ | 1 | 2 | 0 |
-| 6 | Ki-ốt 1 | GĐ1 | ✅ | ✅ | 1 | 1 | 2 |
-| 7 | Ki-ốt 2 | GĐ2 | ✅ | ✅ | 1 | 1 | 2 |
-| 8 | Rạp xiếc Gia Định | GĐ2 | ✅ | ✅ | 2 | 2 | 4 |
-| 9 | Cầu trượt trẻ em | GĐ1 | ✅ | ✅ | 0 | 0 | 2 |
-
-## Cảnh quan & Tiện ích
-
-- Ranh giới công viên (~32ha) – 1 polygon
-- Zone Gia Định 1 & 2 – 2 polygons
-- Hồ nước (117m²) – 1 polygon
-- Thảm cỏ (63.000m²) – 2 polygons
-- Vườn hoa (650m²) – 1 polygon
-- Đường đi bộ – 5 polylines
-- Đường Đặng Văn Sâm – 1 polyline
-- Cầu đi bộ – 1 polyline
-- Bãi đỗ xe – 2 polygons
-- Cây xanh – 6 điểm + 2 vòng tán
-- Ghế đá – 3 điểm
-- Trạm tập thể dục – 1 điểm
-- Đài phun nước – 1 điểm
-- Biển chỉ dẫn – 1 điểm
-- Trạm xe đạp – 1 điểm
+| Khai báo biến | `var` | `const`, `let` |
+| String | `"..."` ghép bằng `+` | Template literal |
+| Module | Module IIFE gắn vào `window` | ES6 `import/export` |
+| Geometry | JSON autocast | `new Polygon()` |
+| Symbol 2D | `type: "simple-fill"` | `new SimpleFillSymbol()` |
 
 ## Chạy dự án
 
@@ -78,38 +79,18 @@ python -m http.server 5500
 npx serve .
 ```
 
-## Tọa độ trung tâm
-
-| Thông tin | Giá trị |
-|---|---|
-| Công trình | Công viên Gia Định, TP. Hồ Chí Minh |
-| Diện tích | ~32 ha |
-| Tọa độ trung tâm | `[106.677, 10.8115]` (WGS84) |
-| Zoom | 16 (~scale 1:3000) |
-| Năm thành lập | 1978 |
-
-## Coding Convention
-
-| Rule | Đúng | Sai |
-|---|---|---|
-| Khai báo biến | `var` | `const`, `let` |
-| String | `"..."` ghép bằng `+` | Template literal |
-| Module | AMD `require([...], ...)` | ES6 `import/export` |
-| Geometry | JSON autocast: `type: "polygon"` + `rings` | `new Polygon()` |
-| Symbol 2D | `type: "simple-fill"` / `"simple-marker"` | `new SimpleFillSymbol()` |
-
 ## Checklist kiểm tra
 
-- [ ] MapView hiển thị Công viên Gia Định, zoom 16
-- [ ] Ranh giới công viên + 2 zone Gia Định 1 & 2
-- [ ] 9 công trình có đủ tường + mái (tối thiểu LOD3)
-- [ ] Cửa sổ, cửa ra vào, cột hiển thị đúng vị trí trên từng công trình
-- [ ] Hồ nước, thảm cỏ, vườn hoa, bãi đỗ xe
-- [ ] Đường đi bộ, đường Đặng Văn Sâm, cầu đi bộ
-- [ ] 6 cây xanh + vòng tán + 3 ghế đá + đài phun + biển chỉ dẫn
-- [ ] Click từng đối tượng → popup: Tên, Mô tả, Ảnh
-- [ ] Legend hiển thị 4 layer
+- [ ] MapView hiển thị Nhà thờ Đức Bà Sài Gòn, zoom 18, basemap satellite
+- [ ] LOD0: Quảng trường, đường, thảm cỏ, bãi đỗ xe
+- [ ] LOD1: Footprint hình chữ thập đầy đủ (nave, transept, apse, towers)
+- [ ] LOD2: Mái dốc với hiệu ứng sáng/tối, tháp chuông 8 múi, thánh giá
+- [ ] LOD3: Rose window, 56 cửa sổ kính, 40 trụ bích, 3 cửa vòm, bậc tam cấp
+- [ ] Features: Tượng Đức Mẹ, 12 cây xanh, hàng rào, đèn đường, ghế đá
+- [ ] Click từng đối tượng → popup hiển thị tên, loại, mô tả
+- [ ] Legend hiển thị 5 layer
 - [ ] LayerList widget cho phép bật/tắt layer
-- [ ] ScaleBar, Home hoạt động
+- [ ] ScaleBar, Home, Search hoạt động
 - [ ] Header: tên đồ án + nhóm
 - [ ] Console: không lỗi đỏ
+- [ ] Tổng số: polygon ≥6, polyline ≥6, point ≥6 ✅
