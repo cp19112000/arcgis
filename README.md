@@ -17,8 +17,7 @@ arcgis/
 │   ├── buildings.js        ← Mạnh + Hà   – 3D công trình kiến trúc (Sala Hipóstila + Porter's Lodge)
 │   ├── structures.js       ← Phúc + Phát – 3D cấu trúc cảnh quan (Ghế rắn + Cầu thang Rồng + Cầu vòm)
 │   └── features.js         ← Chương      – 3D điểm tiện ích (cây cone, biển chỉ dẫn, ghế đá)
-└── assets/
-    └── icons/              ← (không cần – dùng ObjectSymbol3DLayer primitive)
+└── README.md               ← Tài liệu dự án
 ```
 
 ---
@@ -140,7 +139,7 @@ npx serve .
 
 - [ ] SceneView 3D load đúng vị trí Park Güell, Barcelona
 - [ ] Camera góc nghiêng 55° nhìn rõ toàn bộ khu di tích
-- [ ] 3+1+1+3+4+6 = 18 khối công trình 3D hiển thị (buildings + structures)
+- [ ] 3+5+4+3+4 = 19 khối công trình 3D hiển thị (buildings + structures)
 - [ ] 6 điểm cây cone xanh + 6 điểm amenities hiển thị
 - [ ] Click từng đối tượng → Popup hiển thị Tên + Mô tả + Ảnh
 - [ ] Popup ảnh có max-height 200px, border-radius, box-shadow

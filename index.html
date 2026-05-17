@@ -22,7 +22,12 @@
       </div>
     </header>
 
-    <div id="viewDiv"></div>
+    <div id="viewDiv">
+      <div id="loading-overlay">
+        <div class="spinner"></div>
+        <p>Đang tải bản đồ 3D Park Güell…</p>
+      </div>
+    </div>
 
     <div id="legend-panel">
       <div id="legend-toggle" onclick="toggleLegend()">📖 Chú giải</div>
@@ -67,11 +72,13 @@
           },
           environment: {
             lighting: {
-              date: new Date("March 15, 2026 10:00:00 GMT+1"),
+              date: new Date("2026-03-15T09:00:00Z"),
               directShadows: true
             }
           }
         });
+
+        var loadingEl = document.getElementById("loading-overlay");
 
         var buildingLayer = new GraphicsLayer({ title: "Công trình kiến trúc" });
         var structureLayer = new GraphicsLayer({ title: "Cấu trúc & Cảnh quan" });
@@ -84,20 +91,13 @@
           if (typeof window.initStructures === "function") window.initStructures(structureLayer);
           if (typeof window.initFeatures === "function") window.initFeatures(featureLayer);
 
-          console.log("✅ Scene initialized – Park Güell, Barcelona");
-        });
-
-        view.when(function () {
           var legend = new Legend({
             view: view,
             container: "legend-container",
             style: "card"
           });
 
-          var scaleBar = new ScaleBar({
-            view: view,
-            unit: "metric"
-          });
+          var scaleBar = new ScaleBar({ view: view, unit: "metric" });
           view.ui.add(scaleBar, "bottom-left");
 
           var compass = new Compass({ view: view });
@@ -105,6 +105,13 @@
 
           var homeBtn = new Home({ view: view });
           view.ui.add(homeBtn, "top-left");
+
+          if (loadingEl) loadingEl.style.display = "none";
+
+          console.log("✅ Scene initialized – Park Güell, Barcelona");
+        }, function (err) {
+          if (loadingEl) loadingEl.innerHTML = "<p style='color:#c0392b;padding:20px;'>Lỗi tải bản đồ: " + err + "</p>";
+          console.error("❌ Scene init error:", err);
         });
       });
 

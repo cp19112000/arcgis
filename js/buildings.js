@@ -13,7 +13,7 @@
 
 var popup_template_building = {
   title: "{Name}",
-  content: "{Description}<br/><div style='width:100%;text-align:center;'><img src='{ImageUrl}' style='width:100%;max-height:200px;object-fit:cover;border-radius:8px;margin-top:10px;box-shadow:0 2px 4px rgba(0,0,0,0.1);display:block;'/></div>"
+  content: "{Description}<br/><div style='width:100%;text-align:center;'><img src='{ImageUrl}' /></div>"
 };
 
 var jsondata_buildings = {
@@ -239,8 +239,9 @@ window.initBuildings = function (buildingLayer) {
   require(["esri/Graphic"], function (Graphic) {
 
     var createGraphic = function (data) {
+      var geom = { type: data.type, rings: data.rings };
       return new Graphic({
-        geometry: data,
+        geometry: geom,
         symbol: data.symbol,
         attributes: data,
         popupTemplate: data.popupTemplate
