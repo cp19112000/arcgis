@@ -159,8 +159,8 @@ var jsondata_points = {
       symbol: {
         type: "picture-marker",
         url: "assets/icons/parking-lot.png",
-        width: "20",
-        height: "20",
+        width: "20px",
+        height: "20px",
       },
       Name: "Bãi đỗ xe công cộng",
       Description: "Bãi đỗ xe 24/7.",
@@ -175,11 +175,7 @@ window.initPoints = function (pointLayer) {
   require(["esri/Graphic"], function (Graphic) {
     var createGraphic = function (data) {
       return new Graphic({
-        geometry: {
-          type: "point",
-          longitude: data.longitude,
-          latitude: data.latitude,
-        },
+        geometry: data,
         symbol: data.symbol,
         attributes: data,
         popupTemplate: data.popupTemplate,

@@ -120,7 +120,7 @@ npx serve .
 | Thông tin | Giá trị |
 |---|---|
 | Công viên | Công viên Gia Định, Q.Gò Vấp – Bình Thạnh |
-| Center | `[106.6966, 10.8131]` |
+| Center | `[106.674, 10.812]` |
 | Zoom | `17` |
 | Hệ tọa độ | WGS84 (wkid: 4326) |
 
