@@ -1,59 +1,92 @@
-# Bản đồ 3D Park Güell – IE402
+# Bản đồ 2D Công viên Gia Định – IE402 (LOD3.3)
 
 > **Môn học:** Hệ Thống Thông Tin Địa Lý 3 Chiều (IE402)  
-> **Đề tài:** Bản đồ 3D Công viên Park Güell – Barcelona (Antoni Gaudí)  
-> **Công nghệ:** ArcGIS API for JavaScript 4.29 (3D: SceneView, ExtrudeSymbol3DLayer, ObjectSymbol3DLayer)
+> **Đề tài:** Bản đồ 2D Công viên Gia Định – TP. Hồ Chí Minh  
+> **Mức chi tiết:** LOD3.3 (CityGML Architectural Model – ngoại thất)  
+> **Công nghệ:** ArcGIS API for JavaScript 4.29 (MapView 2D, SimpleFillSymbol, SimpleMarkerSymbol)
 
 ---
 
-## Kiến trúc dự án (3D)
+## Kiến trúc dự án
 
 ```
 arcgis/
-├── index.html              ← PM Chương – SceneView, camera, widgets, AMD require()
+├── index.html                ← MapView, AMD require(), widgets, LayerList
 ├── css/
-│   └── style.css           ← Tiên La – giao diện mosaic/Gaudí theme
+│   └── style.css             ← Theme xanh lá cây, popup, legend, LOD badge
 ├── js/
-│   ├── buildings.js        ← Mạnh + Hà   – 3D công trình kiến trúc (Sala Hipóstila + Porter's Lodge)
-│   ├── structures.js       ← Phúc + Phát – 3D cấu trúc cảnh quan (Ghế rắn + Cầu thang Rồng + Cầu vòm)
-│   └── features.js         ← Chương      – 3D điểm tiện ích (cây cone, biển chỉ dẫn, ghế đá)
-└── README.md               ← Tài liệu dự án
+│   ├── park_boundary.js      ← Ranh giới, zone, hồ nước, thảm cỏ, đường đi, bãi xe
+│   ├── buildings_lod3.js     ← 9 công trình LOD3 (tường + mái + cửa sổ + cửa + cột)
+│   └── features.js           ← Cây xanh, ghế đá, trạm TDTT, đài phun, biển chỉ dẫn
+└── README.md
 ```
 
----
+## Mức chi tiết LOD3.3
 
-## Phân công thành viên
+| Bộ phận | Thể hiện trên bản đồ | Kỹ thuật ArcGIS |
+|---|---|---|
+| **WallSurface** (tường) | Footprint màu kem/gạch | `SimpleFillSymbol` nét liền |
+| **RoofSurface** (mái) | Polygon đua rộng hơn tường | `SimpleFillSymbol` nét đứt (dash) |
+| **Window** (cửa sổ) | Hình chữ nhật xanh dương | `SimpleFillSymbol` màu kính |
+| **Door** (cửa) | Hình chữ nhật nâu | `SimpleFillSymbol` màu gỗ |
+| **Column** (cột) | Hình vuông xám | `SimpleFillSymbol` màu ghi |
 
-| Thành viên | File | Khối 3D | Số đối tượng |
-|---|---|---|---|
-| **Chương** | `index.html` + `js/features.js` | PM – SceneView + Điểm tiện ích 3D | 6 cây + 6 amenities |
-| **Mạnh** | `js/buildings.js` | Sala Hipóstila (Sảnh cột Doric) | 3 khối |
-| **Hà** | `js/buildings.js` | Porter's Lodge (Nhà bảo vệ + Cổng) | 5 khối |
-| **Phúc** | `js/structures.js` | Serpentine Bench (Băng ghế rắn) | 4 đoạn |
-| **Phát** | `js/structures.js` | Cầu thang Rồng + Cầu mái vòm | 3 + 4 khối |
-| **Tiên La** | `css/style.css` | CSS mosaic/Gaudí theme | — |
+> **Tổng số:** 9 công trình × (1 tường + 1 mái + N cửa sổ + N cửa + N cột) = ~80+ đối tượng LOD3
 
-**Tổng số đối tượng 3D:** 3 + 5 + 4 + 3 + 4 + 6 + 6 = **31 đối tượng**
+## Công trình LOD3
 
----
+| # | Công trình | Khu | Wall | Roof | Windows | Doors | Columns |
+|---|---|---|---|---|---|---|---|
+| 1 | Nhà hành chính | GĐ1 | ✅ | ✅ | 4 | 1 | 2 |
+| 2 | Chòi nghỉ chân 1 | GĐ1 | ✅ | ✅ | 0 | 1 | 4 |
+| 3 | Chòi nghỉ chân 2 | GĐ2 | ✅ | ✅ | 0 | 1 | 4 |
+| 4 | Nhà vệ sinh 1 | GĐ1 | ✅ | ✅ | 1 | 2 | 0 |
+| 5 | Nhà vệ sinh 2 | GĐ2 | ✅ | ✅ | 1 | 2 | 0 |
+| 6 | Ki-ốt 1 | GĐ1 | ✅ | ✅ | 1 | 1 | 2 |
+| 7 | Ki-ốt 2 | GĐ2 | ✅ | ✅ | 1 | 1 | 2 |
+| 8 | Rạp xiếc Gia Định | GĐ2 | ✅ | ✅ | 2 | 2 | 4 |
+| 9 | Cầu trượt trẻ em | GĐ1 | ✅ | ✅ | 0 | 0 | 2 |
 
-## Luồng dữ liệu (Kiến trúc AMD 3D)
+## Cảnh quan & Tiện ích
 
+- Ranh giới công viên (~32ha) – 1 polygon
+- Zone Gia Định 1 & 2 – 2 polygons
+- Hồ nước (117m²) – 1 polygon
+- Thảm cỏ (63.000m²) – 2 polygons
+- Vườn hoa (650m²) – 1 polygon
+- Đường đi bộ – 5 polylines
+- Đường Đặng Văn Sâm – 1 polyline
+- Cầu đi bộ – 1 polyline
+- Bãi đỗ xe – 2 polygons
+- Cây xanh – 6 điểm + 2 vòng tán
+- Ghế đá – 3 điểm
+- Trạm tập thể dục – 1 điểm
+- Đài phun nước – 1 điểm
+- Biển chỉ dẫn – 1 điểm
+- Trạm xe đạp – 1 điểm
+
+## Chạy dự án
+
+```bash
+# VS Code Live Server (khuyên dùng)
+# Click chuột phải index.html → Open with Live Server
+
+# Python
+python -m http.server 5500
+
+# Node
+npx serve .
 ```
-index.html
-  └─ require(["esri/WebScene", "esri/views/SceneView", ...])
-       └─ view.when(function() {
-            window.initBuildings(buildingLayer);   ← từ buildings.js
-            window.initStructures(structureLayer);  ← từ structures.js
-            window.initFeatures(featureLayer);      ← từ features.js
-          })
 
-buildings.js  → window.initBuildings   = function(layer) { require(["esri/Graphic"], cb) }
-structures.js → window.initStructures  = function(layer) { require(["esri/Graphic"], cb) }
-features.js   → window.initFeatures    = function(layer) { require(["esri/Graphic"], cb) }
-```
+## Tọa độ trung tâm
 
----
+| Thông tin | Giá trị |
+|---|---|
+| Công trình | Công viên Gia Định, TP. Hồ Chí Minh |
+| Diện tích | ~32 ha |
+| Tọa độ trung tâm | `[106.677, 10.8115]` (WGS84) |
+| Zoom | 16 (~scale 1:3000) |
+| Năm thành lập | 1978 |
 
 ## Coding Convention
 
@@ -61,103 +94,22 @@ features.js   → window.initFeatures    = function(layer) { require(["esri/Grap
 |---|---|---|
 | Khai báo biến | `var` | `const`, `let` |
 | String | `"..."` ghép bằng `+` | Template literal |
-| Module | AMD `require([...], function(...){...})` | ES6 `import/export` |
-| Geometry 3D | JSON autocast: `type: "polygon"` + rings | `new Polygon({...})` |
-| Symbol 3D | `type: "polygon-3d"` / `"point-3d"` | `new PolygonSymbol3D()` |
-| Extrude | `ExtrudeSymbol3DLayer`: `size` (m) | `new ExtrudeSymbol3DLayer()` |
-| Object 3D | `ObjectSymbol3DLayer`: `primitive: "cone"` | `new ObjectSymbol3DLayer()` |
-| Data | Plain JS object array ngoài `require()` | Class/factory |
-
----
-
-## Chi tiết các khối 3D
-
-### 1. Sala Hipóstila (Mạnh)
-- Sảnh cột Doric 86 cột, cao 6m, chịu toàn bộ quảng trường phía trên
-- Trần mosaic trencadís xanh trắng
-- **Kỹ thuật:** Polygon extrude 6m + 1.2m (mái)
-
-### 2. Porter's Lodge (Hà)
-- 2 tòa nhà bánh gừng (gingerbread) màu hồng cam + trắng kem
-- Tháp chuông cao 9.5m, cổng sắt rèn 8m
-- **Kỹ thuật:** Polygon extrude 5.5–9.5m
-
-### 3. Serpentine Bench (Phúc)
-- Băng ghế uốn lượn dài 110m, mosaic trencadís
-- Chia làm 4 đoạn bao quanh quảng trường
-- **Kỹ thuật:** Polygon cong extrude 0.6m
-
-### 4. Dragon Stairway (Phát)
-- Cầu thang 3 bậc từ cổng lên quảng trường
-- Tượng rồng El Drac mosaic tại bậc trên cùng
-- **Kỹ thuật:** Polygon bậc thang extrude 0.6–1.8m
-
-### 5. Viaducts (Phát)
-- 4 cầu mái vòm đá (3.5–4m) bao quanh đồi
-- Cột nghiêng style Gaudí
-- **Kỹ thuật:** Polygon extrude 2.8–4m
-
-### 6. Features (Chương)
-- 6 cây Địa Trung Hải dùng cone primitive
-- 6 điểm: tượng rồng, đài phun nước, ghế đá, đồi Calvary
-- **Kỹ thuật:** ObjectSymbol3DLayer cone + IconSymbol3DLayer circle
-
----
-
-## Chạy dự án
-
-Phải chạy qua HTTP server (ArcGIS CDN không hoạt động với `file://`):
-
-```bash
-# VS Code Live Server (khuyên dùng)
-# Click chuột phải index.html → Open with Live Server
-
-# Hoặc Python
-python -m http.server 5500
-# Mở: http://localhost:5500
-
-# Hoặc Node
-npx serve .
-```
-
----
-
-## Tọa độ trung tâm
-
-| Thông tin | Giá trị |
-|---|---|
-| Công trình | Park Güell, Barcelona, Tây Ban Nha |
-| Kiến trúc sư | Antoni Gaudí (1852–1926) |
-| Năm xây dựng | 1900–1914 |
-| Camera position | `[2.1530, 41.4145, 380]` (tilt: 55°, heading: 190°) |
-| Hệ tọa độ | WGS84 (wkid: 4326) |
-| UNESCO | Di sản thế giới từ 1984 |
-
----
+| Module | AMD `require([...], ...)` | ES6 `import/export` |
+| Geometry | JSON autocast: `type: "polygon"` + `rings` | `new Polygon()` |
+| Symbol 2D | `type: "simple-fill"` / `"simple-marker"` | `new SimpleFillSymbol()` |
 
 ## Checklist kiểm tra
 
-- [ ] SceneView 3D load đúng vị trí Park Güell, Barcelona
-- [ ] Camera góc nghiêng 55° nhìn rõ toàn bộ khu di tích
-- [ ] 3+5+4+3+4 = 19 khối công trình 3D hiển thị (buildings + structures)
-- [ ] 6 điểm cây cone xanh + 6 điểm amenities hiển thị
-- [ ] Click từng đối tượng → Popup hiển thị Tên + Mô tả + Ảnh
-- [ ] Popup ảnh có max-height 200px, border-radius, box-shadow
-- [ ] Màu sắc khối 3D khác nhau: vàng kem (cột), hồng cam (nhà), xám (cầu)
-- [ ] Legend hiển thị 3 layer
-- [ ] Compass, ScaleBar, Home button hoạt động
-- [ ] Header hiển thị tên nhóm đầy đủ
-- [ ] Console không có lỗi đỏ
-
----
-
-## Kết quả mong đợi
-
-```
-✅ Scene initialized – Park Güell, Barcelona
-✅ buildings.js: Đã thêm 8 khối công trình
-✅ structures.js: Đã thêm 11 cấu trúc cảnh quan
-✅ features.js: Đã thêm 12 điểm tiện ích 3D
-```
-
-**Tổng cộng:** 31 đối tượng 3D, 6 thành viên, 1 công trình di sản UNESCO.
+- [ ] MapView hiển thị Công viên Gia Định, zoom 16
+- [ ] Ranh giới công viên + 2 zone Gia Định 1 & 2
+- [ ] 9 công trình có đủ tường + mái (tối thiểu LOD3)
+- [ ] Cửa sổ, cửa ra vào, cột hiển thị đúng vị trí trên từng công trình
+- [ ] Hồ nước, thảm cỏ, vườn hoa, bãi đỗ xe
+- [ ] Đường đi bộ, đường Đặng Văn Sâm, cầu đi bộ
+- [ ] 6 cây xanh + vòng tán + 3 ghế đá + đài phun + biển chỉ dẫn
+- [ ] Click từng đối tượng → popup: Tên, Mô tả, Ảnh
+- [ ] Legend hiển thị 4 layer
+- [ ] LayerList widget cho phép bật/tắt layer
+- [ ] ScaleBar, Home hoạt động
+- [ ] Header: tên đồ án + nhóm
+- [ ] Console: không lỗi đỏ

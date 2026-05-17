@@ -1,17 +1,17 @@
 /**
  * ============================================================
  * js/features.js
- * Thành viên phụ trách: CHƯƠNG (PM)
- * Nhiệm vụ: Đặt các điểm tiện ích 3D (cây, đài phun nước,
- *           ghế đá, biển chỉ dẫn) trên bản đồ Park Güell.
+ * Điểm tiện ích & Cây xanh – Công viên Gia Định
  * ============================================================
  *
- * Kỹ thuật: PointSymbol3D với ObjectSymbol3DLayer (cone, sphere)
+ * Vẽ: cây xanh (point + canopy circle), trạm tập thể dục,
+ *     ghế đá, đài phun nước, biển chỉ dẫn
+ * Kỹ thuật: Point với SimpleMarkerSymbol + Polygon vòng tán
  * Tọa độ: WGS84 [longitude, latitude]
  * ============================================================
  */
 
-var popup_template_feature = {
+var popup_feature = {
   title: "{Name}",
   content: "{Description}<br/><div style='width:100%;text-align:center;'><img src='{ImageUrl}' /></div>"
 };
@@ -19,261 +19,304 @@ var popup_template_feature = {
 var jsondata_features = {
 
   // ==========================================================
-  // Cây xanh (Tree markers) – ObjectSymbol3DLayer cone (xanh lá)
+  // CÂY XANH (điểm + vòng tròn tán lá)
+  // Dùng SimpleMarkerSymbol + Polygon cho tán
   // ==========================================================
   trees: [
     {
       type: "point",
-      longitude: 2.15255,
-      latitude: 41.41416,
+      longitude: 106.6730,
+      latitude: 10.8125,
       symbol: {
-        type: "point-3d",
-        symbolLayers: [{
-          type: "object",
-          resource: { primitive: "cone" },
-          material: { color: [60, 140, 60, 1] },
-          height: 8,
-          width: 4,
-          depth: 4
-        }]
+        type: "simple-marker",
+        style: "circle",
+        color: [50, 130, 50, 0.9],
+        size: 8,
+        outline: { color: [30, 80, 30, 1], width: 1 }
       },
-      Name: "Cây thông Địa Trung Hải (Pinus pinea)",
-      Description: "Cây thông dù (stone pine) đặc trưng của vùng Địa Trung Hải, cao 8m. Đây là loài cây được Gaudí giữ lại khi thiết kế công viên, tận dụng tán cây tự nhiên để tạo bóng mát cho lối đi bộ. Nhiều cây trong công viên có tuổi đời trên 150 năm.",
-      ImageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Stone_pine_in_Park_G%C3%BCell.jpg/320px-Stone_pine_in_Park_G%C3%BCell.jpg",
-      Species: "Pinus pinea (Stone pine)",
-      Height_m: 8,
-      popupTemplate: popup_template_feature
+      Name: "Cây sọ khỉ (Monkeypod)",
+      Description: "Cây sọ khỉ (Albizia saman) cổ thụ cao 25m, tán rộng 30m. Đường kính thân 1.2m. Đây là loài cây bóng mát chủ đạo trong công viên, có tuổi đời trên 80 năm. Tán lá rộng che bóng mát cho khu vực ghế đá nghỉ chân.",
+      ImageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Raintree_in_Saigon.jpg/320px-Raintree_in_Saigon.jpg",
+      Species: "Albizia saman",
+      Height_m: 25,
+      Canopy_m: 30,
+      popupTemplate: popup_feature
     },
     {
       type: "point",
-      longitude: 2.15270,
-      latitude: 41.41448,
+      longitude: 106.6740,
+      latitude: 10.8120,
       symbol: {
-        type: "point-3d",
-        symbolLayers: [{
-          type: "object",
-          resource: { primitive: "cone" },
-          material: { color: [50, 130, 50, 1] },
-          height: 6,
-          width: 3.5,
-          depth: 3.5
-        }]
+        type: "simple-marker",
+        style: "circle",
+        color: [60, 140, 60, 0.9],
+        size: 7,
+        outline: { color: [30, 80, 30, 1], width: 1 }
       },
-      Name: "Cây oliu châu Âu (Olea europaea)",
-      Description: "Cây oliu cổ thụ cao 6m, có thân xoắn đặc trưng của những cây hàng trăm năm tuổi. Gaudí đặc biệt yêu thích vẻ đẹp của những cây oliu già và bố trí chúng ở các vị trí chiến lược trong công viên để tạo điểm nhấn cảnh quan.",
-      ImageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Viejos_olivos_en_Barcelona.jpg/320px-Viejos_olivos_en_Barcelona.jpg",
-      Species: "Olea europaea (Olive tree)",
-      Height_m: 6,
-      popupTemplate: popup_template_feature
+      Name: "Cây lim xẹt (Cajeput)",
+      Description: "Cây lim xẹt (Melaleuca cajuputi) cao 20m, thân thẳng, vỏ trắng xốp. Đặc trưng của vùng đất ngập nước Nam Bộ. Lá có tinh dầu khuynh diệp thơm đặc trưng. Cung cấp bóng mát dọc theo lối đi bộ chính.",
+      ImageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Cajeput_tree.jpg/320px-Cajeput_tree.jpg",
+      Species: "Melaleuca cajuputi",
+      Height_m: 20,
+      Canopy_m: 15,
+      popupTemplate: popup_feature
     },
     {
       type: "point",
-      longitude: 2.15290,
-      latitude: 41.41445,
+      longitude: 106.6760,
+      latitude: 10.8115,
       symbol: {
-        type: "point-3d",
-        symbolLayers: [{
-          type: "object",
-          resource: { primitive: "cone" },
-          material: { color: [55, 145, 55, 1] },
-          height: 7,
-          width: 5,
-          depth: 5
-        }]
+        type: "simple-marker",
+        style: "circle",
+        color: [70, 150, 70, 0.9],
+        size: 6,
+        outline: { color: [30, 80, 30, 1], width: 1 }
       },
-      Name: "Cây bách Địa Trung Hải (Cupressus sempervirens)",
-      Description: "Cây bách cao 7m, tán hình tháp đặc trưng, thường được trồng làm cây cảnh quan trong các khu vườn Địa Trung Hải. Gaudí sử dụng cây bách để tạo các hàng rào xanh và điểm nhấn dọc theo các lối đi trong công viên.",
-      ImageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Cupressus_sempervirens_stricta_%282%29.jpg/320px-Cupressus_sempervirens_stricta_%282%29.jpg",
-      Species: "Cupressus sempervirens (Mediterranean cypress)",
-      Height_m: 7,
-      popupTemplate: popup_template_feature
+      Name: "Cây me tây (Tamarind)",
+      Description: "Cây me tây (Tamarindus indica) cao 15m, tán rộng. Quả me chua được dùng làm gia vị và nước giải khát. Cây có tuổi đời khoảng 50 năm, là điểm nhấn cảnh quan gần hồ nước.",
+      ImageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Tamarind_tree.jpg/320px-Tamarind_tree.jpg",
+      Species: "Tamarindus indica",
+      Height_m: 15,
+      Canopy_m: 12,
+      popupTemplate: popup_feature
     },
     {
       type: "point",
-      longitude: 2.15305,
-      latitude: 41.41452,
+      longitude: 106.6780,
+      latitude: 10.8130,
       symbol: {
-        type: "point-3d",
-        symbolLayers: [{
-          type: "object",
-          resource: { primitive: "cone" },
-          material: { color: [70, 150, 70, 1] },
-          height: 5,
-          width: 3,
-          depth: 3
-        }]
+        type: "simple-marker",
+        style: "circle",
+        color: [55, 135, 55, 0.9],
+        size: 7,
+        outline: { color: [30, 80, 30, 1], width: 1 }
       },
-      Name: "Cây chanh vàng (Citrus limon)",
-      Description: "Cây chanh vàng cao 5m với quả vàng rực vào mùa hè, là một trong nhiều cây ăn quả được trồng trong khu vườn Áo (Austria Gardens) phía Bắc công viên. Các cây ăn quả vừa tạo cảnh quan vừa cung cấp bóng mát cho du khách.",
-      ImageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Citrus_limon_in_Botanical_Garden.jpg/320px-Citrus_limon_in_Botanical_Garden.jpg",
-      Species: "Citrus limon (Lemon tree)",
+      Name: "Cây bò cạp nước (Water mimosa)",
+      Description: "Cây bò cạp nước (Neptunia oleracea) mọc gần khu vực ẩm ướt, ven hồ. Thân cây có phao xốp giúp nổi trên mặt nước. Lá cây có thể làm rau ăn, có vị chua nhẹ.",
+      ImageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Neptunia_oleracea.jpg/320px-Neptunia_oleracea.jpg",
+      Species: "Neptunia oleracea",
       Height_m: 5,
-      popupTemplate: popup_template_feature
+      Canopy_m: 4,
+      popupTemplate: popup_feature
     },
     {
       type: "point",
-      longitude: 2.15315,
-      latitude: 41.41438,
+      longitude: 106.6765,
+      latitude: 10.8102,
       symbol: {
-        type: "point-3d",
-        symbolLayers: [{
-          type: "object",
-          resource: { primitive: "cone" },
-          material: { color: [65, 135, 65, 1] },
-          height: 10,
-          width: 5,
-          depth: 5
-        }]
+        type: "simple-marker",
+        style: "circle",
+        color: [65, 145, 65, 0.9],
+        size: 8,
+        outline: { color: [30, 80, 30, 1], width: 1 }
       },
-      Name: "Cây sồi thường (Quercus ilex)",
-      Description: "Cây sồi holm cao 10m, tán lá rộng, cung cấp bóng mát lý tưởng cho khu vực ghế đá nghỉ chân dọc theo các cầu mái vòm. Đây là loài cây bản địa của vùng Địa Trung Hải, có sức sống mãnh liệt và tuổi thọ cao.",
-      ImageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Holm_oak_%284134349626%29.jpg/320px-Holm_oak_%284134349626%29.jpg",
-      Species: "Quercus ilex (Holm oak)",
-      Height_m: 10,
-      popupTemplate: popup_template_feature
+      Name: "Cây thông (Pine)",
+      Description: "Cây thông nhựa (Pinus merkusii) cao 18m, thân thẳng, tán hình tháp. Là loài cây lá kim duy nhất trong công viên, tạo điểm nhấn cảnh quan khác biệt.",
+      ImageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Pine_tree_in_park.jpg/320px-Pine_tree_in_park.jpg",
+      Species: "Pinus merkusii",
+      Height_m: 18,
+      Canopy_m: 10,
+      popupTemplate: popup_feature
     },
     {
       type: "point",
-      longitude: 2.15300,
-      latitude: 41.41430,
+      longitude: 106.6790,
+      latitude: 10.8105,
       symbol: {
-        type: "point-3d",
-        symbolLayers: [{
-          type: "object",
-          resource: { primitive: "cone" },
-          material: { color: [60, 140, 55, 1] },
-          height: 4,
-          width: 2.5,
-          depth: 2.5
-        }]
+        type: "simple-marker",
+        style: "circle",
+        color: [50, 125, 50, 0.9],
+        size: 6,
+        outline: { color: [30, 80, 30, 1], width: 1 }
       },
-      Name: "Cây sim (Myrtus communis)",
-      Description: "Cây sim Địa Trung Hải cao 4m, lá xanh quanh năm và hoa trắng thơm vào mùa hè. Gaudí bố trí các cây sim dọc theo lối đi lát đá để tạo không gian thơm mát và gần gũi với thiên nhiên.",
-      ImageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Myrtus_communis_flowers.jpg/320px-Myrtus_communis_flowers.jpg",
-      Species: "Myrtus communis (Common myrtle)",
-      Height_m: 4,
-      popupTemplate: popup_template_feature
+      Name: "Cây bàng (Terminalia catappa)",
+      Description: "Cây bàng cao 12m, tán lá rộng xòe như chiếc ô. Lá bàng to, rụng theo mùa. Quả bàng có thể ăn được. Cây trồng nhiều dọc các lối đi trong công viên, tạo bóng mát và cảnh quan đẹp.",
+      ImageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Terminalia_catappa.jpg/320px-Terminalia_catappa.jpg",
+      Species: "Terminalia catappa",
+      Height_m: 12,
+      Canopy_m: 14,
+      popupTemplate: popup_feature
     }
   ],
 
   // ==========================================================
-  // Điểm tiện ích & tham quan (Point markers)
+  // VÒNG TRÒN TÁN CÂY (Canopy)
   // ==========================================================
-  amenities: [
+  canopies: [
+    {
+      type: "polygon",
+      rings: (function () {
+        var cx = 106.6730, cy = 10.8125, r = 0.00013;
+        var pts = [];
+        for (var a = 0; a <= 360; a += 15) {
+          pts.push([cx + r * Math.cos(a * Math.PI / 180), cy + r * Math.sin(a * Math.PI / 180)]);
+        }
+        return [pts];
+      })(),
+      symbol: {
+        type: "simple-fill",
+        color: [70, 160, 70, 0.12],
+        outline: { color: [50, 130, 50, 0.3], width: 0.5, type: "simple-line", style: "dash" }
+      },
+      Name: "Tán cây sọ khỉ",
+      popupTemplate: popup_feature
+    },
+    {
+      type: "polygon",
+      rings: (function () {
+        var cx = 106.6740, cy = 10.8120, r = 0.00007;
+        var pts = [];
+        for (var a = 0; a <= 360; a += 15) {
+          pts.push([cx + r * Math.cos(a * Math.PI / 180), cy + r * Math.sin(a * Math.PI / 180)]);
+        }
+        return [pts];
+      })(),
+      symbol: {
+        type: "simple-fill",
+        color: [60, 150, 60, 0.1],
+        outline: { color: [50, 130, 50, 0.3], width: 0.5, type: "simple-line", style: "dash" }
+      },
+      Name: "Tán cây lim xẹt",
+      popupTemplate: popup_feature
+    }
+  ],
+
+  // ==========================================================
+  // GHẾ ĐÁ / GHẾ NGỒI
+  // ==========================================================
+  benches: [
     {
       type: "point",
-      longitude: 2.15272,
-      latitude: 41.41438,
+      longitude: 106.6735,
+      latitude: 10.8118,
       symbol: {
-        type: "point-3d",
-        symbolLayers: [{
-          type: "icon",
-          resource: { primitive: "circle" },
-          material: { color: [200, 150, 50, 1] },
-          size: 12,
-          outline: { color: [255, 255, 255, 0.8], size: 2 }
-        }]
+        type: "simple-marker",
+        style: "square",
+        color: [160, 130, 100, 0.9],
+        size: 6,
+        outline: { color: [100, 80, 60, 1], width: 0.8 }
       },
-      Name: "Tượng Rồng El Drac (The Dragon)",
-      Description: "Tượng rồng biểu tượng của Park Güell, được ốp bằng kỹ thuật trencadís (gốm vỡ mosaic) với các mảnh gốm màu đỏ, cam, vàng. Tượng cao 2m, nặng ~500kg. Đây là một trong những tác phẩm nghệ thuật công cộng nổi tiếng nhất thế giới, thường xuất hiện trong các sách hướng dẫn du lịch Barcelona.",
-      ImageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Parc_G%C3%BCell_-_Drac.jpg/320px-Parc_G%C3%BCell_-_Drac.jpg",
-      popupTemplate: popup_template_feature
+      Name: "Ghế đá nghỉ chân 1",
+      Description: "Ghế đá granit dài 1.8m, đặt dưới tán cây sọ khỉ. Vị trí mát mẻ, thích hợp ngồi đọc sách và thư giãn.",
+      popupTemplate: popup_feature
     },
     {
       type: "point",
-      longitude: 2.15267,
-      latitude: 41.41436,
+      longitude: 106.6762,
+      latitude: 10.8115,
       symbol: {
-        type: "point-3d",
-        symbolLayers: [{
-          type: "icon",
-          resource: { primitive: "circle" },
-          material: { color: [100, 180, 230, 1] },
-          size: 10,
-          outline: { color: [255, 255, 255, 0.8], size: 2 }
-        }]
+        type: "simple-marker",
+        style: "square",
+        color: [160, 130, 100, 0.9],
+        size: 6,
+        outline: { color: [100, 80, 60, 1], width: 0.8 }
       },
-      Name: "Đài phun nước Mặt nạ (Cara de Barcelona)",
-      Description: "Đài phun nước hình mặt nạ bằng đá tại chiếu nghỉ giữa cầu thang. Gaudí thiết kế mặt nạ cách điệu với các đường nét uốn cong mềm mại, nước chảy từ miệng ra bể đá bên dưới. Đây là một phần trong hệ thống thủy lực tự nhiên của công viên, nước được thu gom và tái sử dụng.",
-      ImageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Cara_de_Barcelona.jpg/320px-Cara_de_Barcelona.jpg",
-      popupTemplate: popup_template_feature
+      Name: "Ghế đá nghỉ chân 2",
+      Description: "Ghế đá cạnh hồ nước, có tầm nhìn đẹp ra mặt hồ và vườn hoa. Được nhiều bạn trẻ chọn làm điểm chụp ảnh.",
+      popupTemplate: popup_feature
     },
     {
       type: "point",
-      longitude: 2.15245,
-      latitude: 41.41415,
+      longitude: 106.6785,
+      latitude: 10.8120,
       symbol: {
-        type: "point-3d",
-        symbolLayers: [{
-          type: "icon",
-          resource: { primitive: "circle" },
-          material: { color: [180, 180, 180, 1] },
-          size: 8,
-          outline: { color: [255, 255, 255, 0.8], size: 2 }
-        }]
+        type: "simple-marker",
+        style: "square",
+        color: [160, 130, 100, 0.9],
+        size: 6,
+        outline: { color: [100, 80, 60, 1], width: 0.8 }
+      },
+      Name: "Ghế đá nghỉ chân 3",
+      Description: "Ghế đá dọc đường đi bộ Gia Định 2, gần khu vực đoàn xiếc.",
+      popupTemplate: popup_feature
+    }
+  ],
+
+  // ==========================================================
+  // TRẠM TẬP THỂ DỤC NGOÀI TRỜI
+  // ==========================================================
+  fitness: [
+    {
+      type: "point",
+      longitude: 106.6748,
+      latitude: 10.8125,
+      symbol: {
+        type: "simple-marker",
+        style: "triangle",
+        color: [60, 120, 180, 0.9],
+        size: 10,
+        outline: { color: [30, 80, 130, 1], width: 1 }
+      },
+      Name: "Trạm tập thể dục ngoài trời",
+      Description: "Khu tập thể dục ngoài trời với các thiết bị: xà đơn, xà kép, máy tập đạp chân, ghế tập bụng, máy kéo tay. Trang bị miễn phí cho người dân tập luyện hàng ngày. Hoạt động tốt nhất vào sáng sớm (5h-7h) và chiều tối (17h-19h).",
+      ImageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Outdoor_fitness_park.jpg/320px-Outdoor_fitness_park.jpg",
+      popupTemplate: popup_feature
+    }
+  ],
+
+  // ==========================================================
+  // ĐÀI PHUN NƯỚC
+  // ==========================================================
+  fountain: [
+    {
+      type: "point",
+      longitude: 106.6760,
+      latitude: 10.8110,
+      symbol: {
+        type: "simple-marker",
+        style: "circle",
+        color: [100, 180, 230, 0.9],
+        size: 12,
+        outline: { color: [40, 100, 180, 1], width: 1.5 }
+      },
+      Name: "Đài phun nước trung tâm",
+      Description: "Đài phun nước nghệ thuật đặt tại quảng trường nhỏ trung tâm Gia Định 1. Phun nước theo nhạc vào các buổi tối cuối tuần. Xung quanh có bồn hoa và ghế đá, là điểm hẹn hò quen thuộc của các bạn trẻ. Cao 3m, đường kính bể 5m.",
+      ImageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Fountain_in_park.jpg/320px-Fountain_in_park.jpg",
+      popupTemplate: popup_feature
+    }
+  ],
+
+  // ==========================================================
+  // BIỂN CHỈ DẪN
+  // ==========================================================
+  signs: [
+    {
+      type: "point",
+      longitude: 106.6760,
+      latitude: 10.8098,
+      symbol: {
+        type: "simple-marker",
+        style: "diamond",
+        color: [200, 180, 140, 0.9],
+        size: 8,
+        outline: { color: [120, 100, 60, 1], width: 1 }
       },
       Name: "Biển chỉ dẫn lối vào",
-      Description: "Biển chỉ dẫn du lịch đặt tại lối vào chính, cung cấp thông tin về lịch sử công viên, bản đồ khu di tích và các quy định tham quan. Park Güell mở cửa từ 9:30 – 19:30 (mùa hè) và 9:30 – 17:30 (mùa đông). Giá vé tham quan khu di tích chính: 10€/người lớn.",
-      ImageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Parc_G%C3%BCell_sign.jpg/320px-Parc_G%C3%BCell_sign.jpg",
-      popupTemplate: popup_template_feature
-    },
+      Description: "Biển chỉ dẫn đặt tại cổng chính Hoàng Minh Giám. Cung cấp thông tin: sơ đồ công viên, giờ mở cửa (6h-22h), nội quy, số điện thoại khẩn cấp. Có mã QR tra cứu thông tin trực tuyến.",
+      ImageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Park_sign.jpg/320px-Park_sign.jpg",
+      popupTemplate: popup_feature
+    }
+  ],
+
+  // ==========================================================
+  // TRẠM XE ĐẠP CÔNG CỘNG
+  // ==========================================================
+  bicycle: [
     {
       type: "point",
-      longitude: 2.15330,
-      latitude: 41.41485,
+      longitude: 106.6748,
+      latitude: 10.8100,
       symbol: {
-        type: "point-3d",
-        symbolLayers: [{
-          type: "icon",
-          resource: { primitive: "circle" },
-          material: { color: [230, 200, 160, 1] },
-          size: 14,
-          outline: { color: [255, 255, 255, 0.8], size: 2 }
-        }]
+        type: "simple-marker",
+        style: "square",
+        color: [50, 150, 180, 0.9],
+        size: 10,
+        outline: { color: [30, 100, 130, 1], width: 1 }
       },
-      Name: "Đồi Calvary (El Calvari) – Điểm cao nhất",
-      Description: "Đỉnh đồi cao nhất trong công viên (cao 182m so với mực nước biển), nơi đặt ba cây thánh giá bằng đá tượng trưng cho đồi Golgotha. Từ đây có tầm nhìn 360° toàn cảnh Barcelona: khu phố Eixample, tháp Agbar, xa hơn là biển Địa Trung Hải. Đây là điểm kết thúc của con đường đàng thánh giá (Via Crucis) trong công viên.",
-      ImageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Parc_G%C3%BCell_-_Calvari_%283%29.jpg/320px-Parc_G%C3%BCell_-_Calvari_%283%29.jpg",
-      Elevation_m: 182,
-      popupTemplate: popup_template_feature
-    },
-    {
-      type: "point",
-      longitude: 2.15280,
-      latitude: 41.41420,
-      symbol: {
-        type: "point-3d",
-        symbolLayers: [{
-          type: "icon",
-          resource: { primitive: "circle" },
-          material: { color: [80, 170, 80, 1] },
-          size: 8,
-          outline: { color: [255, 255, 255, 0.8], size: 2 }
-        }]
-      },
-      Name: "Khu vực Áustria Gardens (Jardins d'Àustria)",
-      Description: "Khu vườn phía Nam công viên, được đặt tên để vinh danh nữ bá tước Áo tài trợ kinh phí duy trì công viên những năm 1930. Nơi đây trồng nhiều cây bản địa Địa Trung Hải và các loài hoa theo mùa. Có lối đi bộ lát đá và ghế đá nghỉ chân dưới bóng cây.",
-      ImageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Parque_G%C3%BCell_-_Jardines_de_Austria.jpg/320px-Parque_G%C3%BCell_-_Jardines_de_Austria.jpg",
-      popupTemplate: popup_template_feature
-    },
-    {
-      type: "point",
-      longitude: 2.15315,
-      latitude: 41.41460,
-      symbol: {
-        type: "point-3d",
-        symbolLayers: [{
-          type: "icon",
-          resource: { primitive: "circle" },
-          material: { color: [230, 180, 140, 1] },
-          size: 10,
-          outline: { color: [255, 255, 255, 0.8], size: 2 }
-        }]
-      },
-      Name: "Ghế đá nghỉ chân (Mirador)",
-      Description: "Điểm ngắm cảnh (mirador) với ghế đá dọc theo cầu mái vòm phía Đông. Du khách có thể ngồi nghỉ và ngắm nhìn toàn cảnh quảng trường trung tâm và thành phố Barcelona phía xa. Đây là một trong những điểm check-in phổ biến nhất trong công viên.",
-      ImageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Parc_G%C3%BCell_viewpoint.jpg/320px-Parc_G%C3%BCell_viewpoint.jpg",
-      popupTemplate: popup_template_feature
+      Name: "Trạm xe đạp công cộng",
+      Description: "Trạm cho thuê xe đạp công cộng phục vụ du khách đi dạo trong công viên. Giá thuê: 10.000đ/giờ. Có 20 xe đạp đơn và 5 xe đạp đôi. Hoạt động 6h-21h hàng ngày.",
+      ImageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Public_bicycle_station.jpg/320px-Public_bicycle_station.jpg",
+      popupTemplate: popup_feature
     }
   ]
 };
@@ -281,24 +324,42 @@ var jsondata_features = {
 window.initFeatures = function (featureLayer) {
   require(["esri/Graphic"], function (Graphic) {
 
-    var createGraphic = function (data) {
+    var addPoint = function (data) {
       var geom = { type: data.type, longitude: data.longitude, latitude: data.latitude };
-      return new Graphic({
+      featureLayer.add(new Graphic({
         geometry: geom,
         symbol: data.symbol,
         attributes: data,
         popupTemplate: data.popupTemplate
-      });
+      }));
     };
 
-    jsondata_features.trees.forEach(function (data) {
-      featureLayer.add(createGraphic(data));
-    });
+    var addPolygon = function (data) {
+      var geom = { type: data.type, rings: data.rings };
+      featureLayer.add(new Graphic({
+        geometry: geom,
+        symbol: data.symbol,
+        attributes: data,
+        popupTemplate: data.popupTemplate
+      }));
+    };
 
-    jsondata_features.amenities.forEach(function (data) {
-      featureLayer.add(createGraphic(data));
-    });
+    jsondata_features.trees.forEach(function (d) { addPoint(d); });
+    jsondata_features.canopies.forEach(function (d) { addPolygon(d); });
+    jsondata_features.benches.forEach(function (d) { addPoint(d); });
+    jsondata_features.fitness.forEach(function (d) { addPoint(d); });
+    jsondata_features.fountain.forEach(function (d) { addPoint(d); });
+    jsondata_features.signs.forEach(function (d) { addPoint(d); });
+    jsondata_features.bicycle.forEach(function (d) { addPoint(d); });
 
-    console.log("✅ features.js: Đã thêm " + (jsondata_features.trees.length + jsondata_features.amenities.length) + " điểm tiện ích 3D");
+    console.log("✅ features.js: Đã thêm " + (
+      jsondata_features.trees.length +
+      jsondata_features.canopies.length +
+      jsondata_features.benches.length +
+      jsondata_features.fitness.length +
+      jsondata_features.fountain.length +
+      jsondata_features.signs.length +
+      jsondata_features.bicycle.length
+    ) + " điểm tiện ích & cây xanh");
   });
 };

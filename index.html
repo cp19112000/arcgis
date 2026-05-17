@@ -3,9 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Bản đồ 3D Park Güell – IE402 | Nhóm 1</title>
+    <title>Bản đồ 2D Công viên Gia Định – IE402 | Nhóm 1</title>
 
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏛️</text></svg>" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌳</text></svg>" />
 
     <link rel="stylesheet" href="https://js.arcgis.com/4.29/esri/themes/light/main.css" />
     <script src="https://js.arcgis.com/4.29/"></script>
@@ -16,8 +16,8 @@
     <header id="app-header">
       <div class="header-content">
         <div class="header-text">
-          <h1 class="header-title">🏛️ Bản đồ 3D Park Güell – Antoni Gaudí</h1>
-          <p class="header-subtitle">Hệ thống thông tin địa lý 3 chiều – IE402 | Nhóm 1: Chương – Mạnh – Hà – Phúc – Phát – Tiên La</p>
+          <h1 class="header-title">🌳 Bản đồ 2D Công viên Gia Định – LOD3.3</h1>
+          <p class="header-subtitle">Hệ thống thông tin địa lý 3 chiều – IE402 | Nhóm 1: Công viên Gia Định, TP. Hồ Chí Minh</p>
         </div>
       </div>
     </header>
@@ -25,7 +25,7 @@
     <div id="viewDiv">
       <div id="loading-overlay">
         <div class="spinner"></div>
-        <p>Đang tải bản đồ 3D Park Güell…</p>
+        <p>Đang tải bản đồ Công viên Gia Định…</p>
       </div>
     </div>
 
@@ -34,34 +34,39 @@
       <div id="legend-container"></div>
     </div>
 
-    <script src="js/buildings.js"></script>
-    <script src="js/structures.js"></script>
+    <div id="info-panel">
+      <div class="info-title">📐 LOD3.3 – Chi tiết kiến trúc</div>
+      <div class="info-content">
+        <span class="lod-badge">LOD3</span> Mặt bằng chi tiết: tường, mái, cửa sổ, cửa ra vào, cột
+      </div>
+    </div>
+
+    <script src="js/park_boundary.js"></script>
+    <script src="js/buildings_lod3.js"></script>
     <script src="js/features.js"></script>
 
     <script>
       require([
-        "esri/WebScene",
-        "esri/views/SceneView",
+        "esri/Map",
+        "esri/views/MapView",
         "esri/layers/GraphicsLayer",
         "esri/widgets/Legend",
         "esri/widgets/ScaleBar",
         "esri/widgets/Compass",
         "esri/widgets/Home",
-      ], function (WebScene, SceneView, GraphicsLayer, Legend, ScaleBar, Compass, Home) {
+        "esri/widgets/LayerList",
+      ], function (Map, MapView, GraphicsLayer, Legend, ScaleBar, Compass, Home, LayerList) {
 
-        var scene = new WebScene({
-          basemap: "satellite",
-          ground: "world-elevation"
+        var map = new Map({
+          basemap: "satellite"
         });
 
-        var view = new SceneView({
+        var view = new MapView({
           container: "viewDiv",
-          map: scene,
-          camera: {
-            position: [2.1530, 41.4145, 380],
-            tilt: 55,
-            heading: 190
-          },
+          map: map,
+          center: [106.677, 10.8115],
+          zoom: 16,
+          scale: 3000,
           popup: {
             dockEnabled: true,
             dockOptions: {
@@ -69,26 +74,21 @@
               breakpoint: false,
               buttonEnabled: true
             }
-          },
-          environment: {
-            lighting: {
-              date: new Date("2026-03-15T09:00:00Z"),
-              directShadows: true
-            }
           }
         });
 
         var loadingEl = document.getElementById("loading-overlay");
 
-        var buildingLayer = new GraphicsLayer({ title: "Công trình kiến trúc" });
-        var structureLayer = new GraphicsLayer({ title: "Cấu trúc & Cảnh quan" });
-        var featureLayer = new GraphicsLayer({ title: "Điểm tiện ích" });
+        var parkLayer = new GraphicsLayer({ title: "Công viên & Cảnh quan", listMode: "show" });
+        var buildingLayer = new GraphicsLayer({ title: "Công trình LOD3.3", listMode: "show" });
+        var detailLayer = new GraphicsLayer({ title: "Chi tiết kiến trúc (cửa sổ, cửa, cột)", listMode: "show" });
+        var featureLayer = new GraphicsLayer({ title: "Tiện ích & Cây xanh", listMode: "show" });
 
-        scene.addMany([buildingLayer, structureLayer, featureLayer]);
+        map.addMany([parkLayer, buildingLayer, detailLayer, featureLayer]);
 
         view.when(function () {
-          if (typeof window.initBuildings === "function") window.initBuildings(buildingLayer);
-          if (typeof window.initStructures === "function") window.initStructures(structureLayer);
+          if (typeof window.initParkBoundary === "function") window.initParkBoundary(parkLayer);
+          if (typeof window.initBuildingsLOD3 === "function") window.initBuildingsLOD3(buildingLayer, detailLayer);
           if (typeof window.initFeatures === "function") window.initFeatures(featureLayer);
 
           var legend = new Legend({
@@ -100,18 +100,18 @@
           var scaleBar = new ScaleBar({ view: view, unit: "metric" });
           view.ui.add(scaleBar, "bottom-left");
 
-          var compass = new Compass({ view: view });
-          view.ui.add(compass, "top-right");
+          var layerList = new LayerList({ view: view });
+          view.ui.add(layerList, "top-right");
 
           var homeBtn = new Home({ view: view });
           view.ui.add(homeBtn, "top-left");
 
           if (loadingEl) loadingEl.style.display = "none";
 
-          console.log("✅ Scene initialized – Park Güell, Barcelona");
+          console.log("✅ Map initialized – Công viên Gia Định, TP.HCM (LOD3.3)");
         }, function (err) {
           if (loadingEl) loadingEl.innerHTML = "<p style='color:#c0392b;padding:20px;'>Lỗi tải bản đồ: " + err + "</p>";
-          console.error("❌ Scene init error:", err);
+          console.error("❌ Map init error:", err);
         });
       });
 
