@@ -74,6 +74,112 @@
         { Name: "Vạch qua đường Đồng Khởi #"+(cw+1), Type: "Crosswalk", LOD: "Feature" }, crosswalkSym));
     }
 
+
+        // ===== 10. PUBLIC FACILITIES / POINTS =====
+
+    var gateMainSym = g.symbol.marker(
+      "assets/icons/gate.png", 40
+    );
+
+    var fountainSym = g.symbol.marker(
+      "assets/icons/fountain.png", 40
+    );
+
+    var drinkSym = g.symbol.marker(
+      "assets/icons/drink.png", 20
+    );
+
+    var restroomSym = g.symbol.marker(
+      "assets/icons/restroom.png", 20
+    );
+
+    var monumentSym = g.symbol.marker(
+      "assets/icons/monument.png", 20
+    );
+
+    var firstAidSym = g.symbol.marker(
+      "assets/icons/first-aid.png", 20
+    );
+
+    // 1. Cổng chính
+    var gateMain = g.toGeo(55, 0);
+    layer.add(g.makePoint(
+      gateMain[0],
+      gateMain[1],
+      {
+        Name: "Cổng chính",
+        Type: "Main Gate",
+        Description: "Lối vào chính Nhà thờ Đức Bà"
+      },
+      gateMainSym
+    ));
+
+    // 2. Đài phun nước
+    var fountain = g.toGeo(50, 35);
+    layer.add(g.makePoint(
+      fountain[0],
+      fountain[1],
+      {
+        Name: "Đài phun nước",
+        Type: "Fountain",
+        Description: "Khu vực đài phun nước trung tâm"
+      },
+      fountainSym
+    ));
+
+    // 3. Quầy nước giải khát
+    var drink = g.toGeo(50, -15);
+    layer.add(g.makePoint(
+      drink[0],
+      drink[1],
+      {
+        Name: "Quầy nước giải khát",
+        Type: "Drink Stall",
+        Description: "Khu bán nước và thức uống"
+      },
+      drinkSym
+    ));
+
+    // 4. Nhà vệ sinh công cộng
+    var restroom = g.toGeo(-35, -20);
+    layer.add(g.makePoint(
+      restroom[0],
+      restroom[1],
+      {
+        Name: "Nhà vệ sinh công cộng",
+        Type: "Restroom",
+        Description: "Khu vệ sinh phục vụ khách tham quan"
+      },
+      restroomSym
+    ));
+
+    // 5. Tượng đài
+    var monument = g.toGeo(75, 0);
+    layer.add(g.makePoint(
+      monument[0],
+      monument[1],
+      {
+        Name: "Tượng đài",
+        Type: "Monument",
+        Description: "Tượng Đức Mẹ Hòa Bình"
+      },
+      monumentSym
+    ));
+
+    // 6. Trạm y tế / Sơ cứu
+    var firstAid = g.toGeo(-40, 35);
+    layer.add(g.makePoint(
+      firstAid[0],
+      firstAid[1],
+      {
+        Name: "Trạm y tế / Sơ cứu",
+        Type: "First Aid",
+        Description: "Điểm hỗ trợ sơ cứu và y tế"
+      },
+      firstAidSym
+    ));
+
     console.log("✅ Features: statue, cross, fence, 4 gates, 12 trees, 8 lamps, 6 benches, sign, 3 crosswalks");
+
   };
 })(window);
